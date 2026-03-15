@@ -4,23 +4,6 @@
   padding: 0 1.5rem 2rem;
 }
 
-.layout nav {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #333;
-}
-
-.layout nav a {
-  color: #646cff;
-  text-decoration: none;
-}
-
-.layout nav a:hover {
-  text-decoration: underline;
-}
-
 .layout__main {
   padding-top: 2rem;
 }
