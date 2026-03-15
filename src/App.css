@@ -5,24 +5,6 @@
   text-align: center;
 }
 
-nav {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #333;
-}
-
-nav a {
-  color: #646cff;
-  text-decoration: none;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
