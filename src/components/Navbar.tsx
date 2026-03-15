@@ -5,8 +5,6 @@ const navLinks = [
   { to: '/about', label: 'About' },
   { to: '/projects', label: 'Projects' },
   { to: '/resume', label: 'Resume' },
-  { to: '/now', label: 'Now' },
-  { to: '/contact', label: 'Contact' },
 ];
 
 export function Navbar() {
