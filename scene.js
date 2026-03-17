@@ -486,6 +486,31 @@ window.addEventListener('resize', () => {
   positionNeonSVG();
 });
 
+// ── CURSOR ──
+const cursorRing = document.getElementById('hs-cursor-ring');
+const cursorDot  = document.getElementById('hs-cursor-dot');
+
+if (cursorRing && cursorDot) {
+  document.addEventListener('mousemove', e => {
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top  = e.clientY + 'px';
+    cursorDot.style.left  = e.clientX + 'px';
+    cursorDot.style.top   = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorRing.style.width  = '34px';
+      cursorRing.style.height = '34px';
+      cursorRing.style.borderColor = 'rgba(0,229,255,.9)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorRing.style.width  = '22px';
+      cursorRing.style.height = '22px';
+      cursorRing.style.borderColor = 'rgba(0,229,255,.55)';
+    });
+  });
+}
+
 // ── PARALLAX ──
 document.addEventListener('mousemove', e => {
   const mx = (e.clientX / W() - 0.5) * 2;
