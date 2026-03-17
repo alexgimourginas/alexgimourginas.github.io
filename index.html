@@ -1,13 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>alexgimourginas.github.io</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Gimourginas — Neon District</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="scene.css">
+</head>
+<body>
+
+  <!-- ── SCENE ── -->
+  <div class="hs-scene">
+    <div class="hs-sky"></div>
+    <div class="hs-stars" id="hs-stars"></div>
+    <div class="hs-glow-orbs" id="hs-glow-orbs"></div>
+    <canvas class="hs-flow-canvas"       id="hs-flow-canvas"></canvas>
+    <svg class="hs-city-layer hs-city-back"  id="hs-city-back"  preserveAspectRatio="none"></svg>
+    <svg class="hs-city-layer hs-city-mid"   id="hs-city-mid"   preserveAspectRatio="none"></svg>
+    <svg class="hs-city-layer hs-city-front" id="hs-city-front" preserveAspectRatio="none"></svg>
+    <canvas class="hs-windows-canvas"    id="hs-windows-canvas"></canvas>
+    <div class="hs-building-signs"       id="hs-building-signs"></div>
+    <div class="hs-wires-layer"          id="hs-wires-layer"></div>
+    <canvas class="hs-rain-canvas"       id="hs-rain-canvas"></canvas>
+    <div class="hs-street"></div>
+    <div class="hs-street-reflection"></div>
+    <canvas class="hs-reflection-canvas" id="hs-reflection-canvas"></canvas>
+    <canvas class="hs-objects-canvas"    id="hs-objects-canvas"></canvas>
+  </div>
+
+  <!-- ── CONTENT ── -->
+  <div class="hs-content">
+    <div class="hs-hero-badge">Welcome to the district</div>
+
+    <div class="hs-neon-title-wrap" id="hs-neon-title-wrap">
+      <svg id="hs-neon-svg" class="hs-neon-svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#00e5ff"/>
+            <stop offset="50%"  stop-color="#b44aff"/>
+            <stop offset="100%" stop-color="#ff2d95"/>
+          </linearGradient>
+          <filter id="neonGlow">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <text class="hs-neon-text hs-neon-glow-outer"   text-anchor="middle" dominant-baseline="central">ALEX GIMOURGINAS</text>
+        <text class="hs-neon-text hs-neon-stroke-base"  text-anchor="middle" dominant-baseline="central">ALEX GIMOURGINAS</text>
+        <text class="hs-neon-text hs-neon-stroke-flow"  text-anchor="middle" dominant-baseline="central">ALEX GIMOURGINAS</text>
+        <text class="hs-neon-text hs-neon-stroke-flow2" text-anchor="middle" dominant-baseline="central">ALEX GIMOURGINAS</text>
+      </svg>
+      <h1 class="hs-hero-title" aria-label="Alex Gimourginas">ALEX GIMOURGINAS</h1>
+    </div>
+
+    <p class="hs-hero-sub">Developer &bull; Designer &bull; Creator</p>
+    <div class="hs-neon-hr"></div>
+
+    <nav class="hs-nav-signs" id="hs-nav-signs">
+      <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="nav-sign" data-c="cyan">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span class="nav-label">Résumé</span>
+        <span class="nav-kanji">履</span>
+      </a>
+      <a href="projects.html" class="nav-sign" data-c="magenta">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        <span class="nav-label">Projects</span>
+        <span class="nav-kanji">作</span>
+      </a>
+      <a href="about.html" class="nav-sign" data-c="amber">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="nav-label">About Me</span>
+        <span class="nav-kanji">人</span>
+      </a>
+      <button type="button" class="nav-sign" data-c="purple" id="contact-btn">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span class="nav-label">Contact</span>
+        <span class="nav-kanji">信</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="hs-footer-row">
+    <a href="https://github.com/alexgimourginas" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://linkedin.com/in/alexgimourginas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://twitter.com/alexgimourginas" target="_blank" rel="noopener noreferrer">Twitter</a>
+  </div>
+
+  <!-- ── CONTACT MODAL ── -->
+  <div id="contact-modal"
+       style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;z-index:1000;">
+    <div id="contact-modal-inner"
+         style="background:#0d1035;border:1px solid #ffffff12;border-radius:6px;padding:2rem;max-width:360px;width:90%;">
+      <h2 style="font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:.2em;color:#00e5ff;margin-bottom:1rem;">CONTACT</h2>
+      <p style="color:#8890bb;font-size:1rem;line-height:1.6;">Placeholder — contact form or links will go here.</p>
+      <button type="button" id="contact-close-btn"
+              style="margin-top:1.5rem;font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:.2em;color:#00e5ff;border:1px solid #00e5ff44;padding:.5rem 1.2rem;border-radius:2px;cursor:pointer;background:none;transition:border-color .2s;">
+        CLOSE
+      </button>
+    </div>
+  </div>
+
+  <script type="module" src="scene.js"></script>
+</body>
 </html>
