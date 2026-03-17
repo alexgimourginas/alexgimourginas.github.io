@@ -171,7 +171,7 @@ function drawWindows(t) {
   const d = document.createElement('div');
   d.className = 'hs-bsign';
   d.textContent = s.t;
-  d.style.cssText = `left:${s.x};bottom:${s.y};color:${s.c};border-color:${s.c}22;opacity:.18;text-shadow:0 0 6px ${s.c}55,0 0 14px ${s.c}22;box-shadow:0 0 4px ${s.c}1a,inset 0 0 4px ${s.c}08;animation-delay:${-i*1.3}s;${s.f ? `font-family:'Orbitron',monospace;font-weight:700;font-size:.7rem;letter-spacing:.15em` : ''}`;
+  d.style.cssText = `left:${s.x};bottom:${s.y};color:${s.c};border-color:${s.c}0d;opacity:.1;text-shadow:0 0 5px ${s.c}33;filter:blur(0.5px);animation-delay:${-i*1.3}s;${s.f ? `font-family:'Orbitron',monospace;font-weight:700;font-size:.7rem;letter-spacing:.15em` : ''}`;
   buildingSignsEl.appendChild(d);
 });
 
@@ -209,8 +209,8 @@ initRain();
 function drawRain() {
   if (!rainCtx || !rainCanvas) return;
   rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
-  rainCtx.strokeStyle = 'rgba(0,229,255,0.12)';
-  rainCtx.lineWidth = 0.5;
+  rainCtx.strokeStyle = 'rgba(180,225,255,0.32)';
+  rainCtx.lineWidth = 0.65;
   rainCtx.beginPath();
   for (const d of rainDrops) {
     rainCtx.moveTo(d.x, d.y);
