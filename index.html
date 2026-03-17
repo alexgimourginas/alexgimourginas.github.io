@@ -15,6 +15,83 @@
   <!-- ── SCENE ── -->
   <div class="hs-scene">
     <div class="hs-sky"></div>
+    <div class="hs-moon"></div>
+
+    <!-- Landmark building A: lattice spire (left) -->
+    <svg class="hs-landmark" id="hs-landmark-a" aria-hidden="true" viewBox="0 0 80 560" preserveAspectRatio="xMidYMax meet">
+      <!-- Main tapered tower body -->
+      <polygon points="40,18 18,520 62,520" fill="#0a0c24" stroke="#18224a" stroke-width="0.8"/>
+      <!-- Cross-braces lower -->
+      <line x1="19" y1="420" x2="61" y2="520" stroke="#141a3c" stroke-width="0.9" opacity=".8"/>
+      <line x1="61" y1="420" x2="19" y2="520" stroke="#141a3c" stroke-width="0.9" opacity=".8"/>
+      <line x1="22" y1="330" x2="58" y2="420" stroke="#141a3c" stroke-width="0.9" opacity=".7"/>
+      <line x1="58" y1="330" x2="22" y2="420" stroke="#141a3c" stroke-width="0.9" opacity=".7"/>
+      <line x1="26" y1="256" x2="54" y2="330" stroke="#141a3c" stroke-width="0.8" opacity=".6"/>
+      <line x1="54" y1="256" x2="26" y2="330" stroke="#141a3c" stroke-width="0.8" opacity=".6"/>
+      <!-- Observation deck platform -->
+      <rect x="10" y="230" width="60" height="10" fill="#0d1130" stroke="#18224a" stroke-width="0.8"/>
+      <rect x="13" y="228" width="54" height="3" fill="#1a2455" opacity=".4"/>
+      <!-- Thin upper mast -->
+      <rect x="37" y="0" width="6" height="230" fill="#0d1030" stroke="#16204a" stroke-width="0.5"/>
+      <!-- Neon strip on obs deck -->
+      <rect x="10" y="240" width="60" height="1.5" fill="#00e5ff" opacity=".28">
+        <animate attributeName="opacity" values=".28;.1;.28" dur="5s" repeatCount="indefinite"/>
+      </rect>
+      <!-- Obs deck windows -->
+      <rect x="17" y="233" width="4" height="4" fill="#00e5ff" opacity=".22">
+        <animate attributeName="opacity" values=".22;.06;.22" dur="3.5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="38" y="233" width="4" height="4" fill="#ffb347" opacity=".18"/>
+      <rect x="56" y="233" width="4" height="4" fill="#00e5ff" opacity=".16">
+        <animate attributeName="opacity" values=".16;.04;.16" dur="4.5s" repeatCount="indefinite"/>
+      </rect>
+      <!-- Antenna blink -->
+      <circle cx="40" cy="10" r="2.5" fill="#ff2d55" opacity=".75">
+        <animate attributeName="opacity" values=".75;.15;.75" dur="2.4s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+
+    <!-- Landmark building B: stepped ziggurat (right) -->
+    <svg class="hs-landmark" id="hs-landmark-b" aria-hidden="true" viewBox="0 0 150 500" preserveAspectRatio="xMidYMax meet">
+      <!-- Crown / antenna -->
+      <rect x="68" y="22" width="14" height="38" fill="#0c0e28" stroke="#16204a" stroke-width="0.6"/>
+      <rect x="64" y="14" width="22" height="12" fill="#0c0e28" stroke="#16204a" stroke-width="0.6"/>
+      <circle cx="75" cy="8" r="3" fill="#ff2d95">
+        <animate attributeName="opacity" values=".85;.12;.85" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Tier 4 (top) -->
+      <rect x="44" y="60" width="62" height="78" fill="#0a0b24" stroke="#16204a" stroke-width="0.7"/>
+      <!-- Tier 3 -->
+      <rect x="28" y="158" width="94" height="88" fill="#090b22" stroke="#16204a" stroke-width="0.7"/>
+      <!-- Tier 2 -->
+      <rect x="12" y="268" width="126" height="100" fill="#08091f" stroke="#16204a" stroke-width="0.7"/>
+      <!-- Tier 1 base -->
+      <rect x="0"  y="388" width="150" height="112" fill="#07081c" stroke="#16204a" stroke-width="0.7"/>
+      <!-- Neon tier edges -->
+      <rect x="44" y="156" width="62" height="2" fill="#ff2d95" opacity=".32">
+        <animate attributeName="opacity" values=".32;.1;.32" dur="6s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="28" y="266" width="94" height="2" fill="#b44aff" opacity=".28">
+        <animate attributeName="opacity" values=".28;.08;.28" dur="7.5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="12" y="366" width="126" height="2" fill="#00e5ff" opacity=".25">
+        <animate attributeName="opacity" values=".25;.07;.25" dur="5.5s" repeatCount="indefinite"/>
+      </rect>
+      <!-- Windows tier 4 -->
+      <rect x="52" y="72"  width="5" height="7" fill="#ffb347" opacity=".18"/>
+      <rect x="68" y="72"  width="5" height="7" fill="#00e5ff" opacity=".14">
+        <animate attributeName="opacity" values=".14;.04;.14" dur="4s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="84" y="72"  width="5" height="7" fill="#ffb347" opacity=".16"/>
+      <!-- Windows tier 3 -->
+      <rect x="36" y="172" width="5" height="7" fill="#00e5ff" opacity=".12"/>
+      <rect x="52" y="172" width="5" height="7" fill="#ffffff" opacity=".1"/>
+      <rect x="68" y="172" width="5" height="7" fill="#00e5ff" opacity=".15">
+        <animate attributeName="opacity" values=".15;.04;.15" dur="5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="84" y="172" width="5" height="7" fill="#ffb347" opacity=".1"/>
+      <rect x="100" y="172" width="5" height="7" fill="#ffffff" opacity=".09"/>
+    </svg>
     <div class="hs-stars" id="hs-stars"></div>
     <div class="hs-glow-orbs" id="hs-glow-orbs"></div>
     <canvas class="hs-flow-canvas"       id="hs-flow-canvas"></canvas>

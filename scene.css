@@ -105,6 +105,43 @@
   50%       { transform: translateY(-8px) rotate(3deg); }
 }
 
+/* MOON */
+.hs-moon {
+  position: absolute;
+  top: 7%;
+  right: 13%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #f0eabc, #cfc068 45%, #a08830 78%, transparent 92%);
+  box-shadow: 0 0 14px rgba(215,200,110,.22), 0 0 45px rgba(215,200,110,.08);
+  z-index: 3;
+  opacity: .68;
+  overflow: hidden;
+}
+/* crescent shadow overlay — colour matches sky at that position */
+.hs-moon::after {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 13px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #09092b;
+}
+
+/* LANDMARK BUILDINGS */
+.hs-landmark {
+  position: absolute;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: .36;
+}
+#hs-landmark-a { left: 13%; width: 70px;  height: 54vh; }
+#hs-landmark-b { right: 8%; width: 110px; height: 50vh; }
+
 /* ── CONTENT ── */
 .hs-content {
   position: fixed; inset: 0; z-index: 20;
