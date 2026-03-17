@@ -430,11 +430,11 @@ function initFog() {
 initFog();
 
 const fogBands = [
-  { yFrac: 0.10, speed: 0.06, widthFrac: 1.3, alpha: 0.028, r: 140, g: 180, b: 230 },
-  { yFrac: 0.30, speed:-0.05, widthFrac: 1.5, alpha: 0.038, r: 160, g: 200, b: 240 },
-  { yFrac: 0.52, speed: 0.04, widthFrac: 1.2, alpha: 0.045, r: 120, g: 160, b: 210 },
-  { yFrac: 0.72, speed:-0.07, widthFrac: 1.6, alpha: 0.032, r: 170, g: 210, b: 245 },
-  { yFrac: 0.88, speed: 0.09, widthFrac: 1.4, alpha: 0.024, r: 100, g: 150, b: 200 },
+  { yFrac: 0.40, speed: 0.06, widthFrac: 1.3, alpha: 0.018, r: 140, g: 180, b: 230 },
+  { yFrac: 0.56, speed:-0.05, widthFrac: 1.5, alpha: 0.024, r: 160, g: 200, b: 240 },
+  { yFrac: 0.70, speed: 0.04, widthFrac: 1.2, alpha: 0.030, r: 120, g: 160, b: 210 },
+  { yFrac: 0.82, speed:-0.07, widthFrac: 1.6, alpha: 0.022, r: 170, g: 210, b: 245 },
+  { yFrac: 0.92, speed: 0.09, widthFrac: 1.4, alpha: 0.016, r: 100, g: 150, b: 200 },
 ];
 
 function drawFog(t) {
@@ -485,31 +485,6 @@ window.addEventListener('resize', () => {
   initFog();
   positionNeonSVG();
 });
-
-// ── CURSOR ──
-const cursorRing = document.getElementById('hs-cursor-ring');
-const cursorDot  = document.getElementById('hs-cursor-dot');
-
-if (cursorRing && cursorDot) {
-  document.addEventListener('mousemove', e => {
-    cursorRing.style.left = e.clientX + 'px';
-    cursorRing.style.top  = e.clientY + 'px';
-    cursorDot.style.left  = e.clientX + 'px';
-    cursorDot.style.top   = e.clientY + 'px';
-  });
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursorRing.style.width  = '34px';
-      cursorRing.style.height = '34px';
-      cursorRing.style.borderColor = 'rgba(0,229,255,.9)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursorRing.style.width  = '22px';
-      cursorRing.style.height = '22px';
-      cursorRing.style.borderColor = 'rgba(0,229,255,.55)';
-    });
-  });
-}
 
 // ── PARALLAX ──
 document.addEventListener('mousemove', e => {
