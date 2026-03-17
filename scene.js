@@ -417,6 +417,47 @@ if (navSignsEl) {
   });
 }
 
+// ── FOG ──
+const fogCanvas = document.getElementById('hs-fog-canvas');
+let fogCtx = null;
+
+function initFog() {
+  if (!fogCanvas) return;
+  fogCtx = fogCanvas.getContext('2d');
+  fogCanvas.width = W();
+  fogCanvas.height = fogCanvas.offsetHeight || H() * 0.45;
+}
+initFog();
+
+const fogBands = [
+  { yFrac: 0.10, speed: 0.06, widthFrac: 1.3, alpha: 0.028, r: 140, g: 180, b: 230 },
+  { yFrac: 0.30, speed:-0.05, widthFrac: 1.5, alpha: 0.038, r: 160, g: 200, b: 240 },
+  { yFrac: 0.52, speed: 0.04, widthFrac: 1.2, alpha: 0.045, r: 120, g: 160, b: 210 },
+  { yFrac: 0.72, speed:-0.07, widthFrac: 1.6, alpha: 0.032, r: 170, g: 210, b: 245 },
+  { yFrac: 0.88, speed: 0.09, widthFrac: 1.4, alpha: 0.024, r: 100, g: 150, b: 200 },
+];
+
+function drawFog(t) {
+  if (!fogCtx || !fogCanvas) return;
+  fogCtx.clearRect(0, 0, fogCanvas.width, fogCanvas.height);
+  const cH = fogCanvas.height;
+  for (const b of fogBands) {
+    const y = cH * b.yFrac;
+    const drift = Math.sin(t * b.speed + b.yFrac * 4) * W() * 0.06;
+    const w = W() * b.widthFrac;
+    const x = (W() - w) / 2 + drift;
+    const grad = fogCtx.createLinearGradient(x, 0, x + w, 0);
+    const c = `${b.r},${b.g},${b.b}`;
+    grad.addColorStop(0,   `rgba(${c},0)`);
+    grad.addColorStop(0.15,`rgba(${c},${b.alpha})`);
+    grad.addColorStop(0.5, `rgba(${c},${b.alpha * 1.6})`);
+    grad.addColorStop(0.85,`rgba(${c},${b.alpha})`);
+    grad.addColorStop(1,   `rgba(${c},0)`);
+    fogCtx.fillStyle = grad;
+    fogCtx.fillRect(x, y - 22, w, 48);
+  }
+}
+
 // ── MAIN LOOP ──
 function loop(ts) {
   const t = ts * 0.001;
@@ -428,6 +469,7 @@ function loop(ts) {
   drawTram(t);
   drawFlyingCars(t);
   drawPuddles(t);
+  drawFog(t);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -440,6 +482,7 @@ window.addEventListener('resize', () => {
   initNeonFlow();
   initReflections();
   initObjects();
+  initFog();
   positionNeonSVG();
 });
 
