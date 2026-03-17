@@ -48,7 +48,7 @@
 }
 
 /* CANVASES */
-.hs-rain-canvas  { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: .3; }
+.hs-rain-canvas  { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: .45; }
 .hs-flow-canvas  { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .55; }
 
 /* CITY LAYERS */
