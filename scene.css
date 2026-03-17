@@ -85,7 +85,7 @@
 .hs-street-reflection { position: absolute; bottom: 0; left: 0; right: 0; height: 16vh; z-index: 8; pointer-events: none; background: linear-gradient(to top, #00e5ff06, transparent 40%), linear-gradient(to top, #ff2d9504, transparent 30%); }
 .hs-reflection-canvas { position: absolute; bottom: 0; left: 0; right: 0; height: 16vh; z-index: 8; pointer-events: none; opacity: .4; }
 .hs-objects-canvas    { position: absolute; inset: 0; z-index: 9; pointer-events: none; }
-.hs-fog-canvas        { position: absolute; bottom: 0; left: 0; right: 0; height: 45vh; z-index: 10; pointer-events: none; opacity: .6; }
+.hs-fog-canvas        { position: absolute; bottom: 0; left: 0; right: 0; height: 28vh; z-index: 10; pointer-events: none; opacity: .5; }
 
 /* WIRES */
 .hs-wires-layer { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
@@ -242,32 +242,6 @@
 .hs-footer-row { position: fixed; bottom: 1.2rem; left: 0; right: 0; z-index: 20; display: flex; justify-content: center; gap: 2rem; pointer-events: all; }
 .hs-footer-row a { font-size: .7rem; letter-spacing: .25em; text-transform: uppercase; color: #3a4070; text-decoration: none; transition: color .3s; }
 .hs-footer-row a:hover { color: #00e5ff; }
-
-/* CUSTOM CURSOR */
-body { cursor: none; }
-.hs-cursor-ring {
-  position: fixed;
-  width: 22px;
-  height: 22px;
-  border: 1px solid rgba(0,229,255,.55);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%,-50%);
-  transition: width .15s ease, height .15s ease, border-color .15s ease;
-  mix-blend-mode: screen;
-}
-.hs-cursor-dot {
-  position: fixed;
-  width: 3px;
-  height: 3px;
-  background: #00e5ff;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%,-50%);
-  box-shadow: 0 0 5px rgba(0,229,255,.9);
-}
 
 @keyframes hs-fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
