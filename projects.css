@@ -5,25 +5,87 @@
 /* ── TRAM INTRO ── */
 #pj-intro {
   position: fixed; inset: 0; z-index: 100;
-  background: #040618; transition: opacity 0.5s ease-out;
-  animation: pj-introFallback 2s forwards;
+  background: transparent; transition: opacity 0.5s ease-out;
+  animation: pj-introFallback 1.5s forwards;
 }
 @keyframes pj-introFallback {
-  0%, 80% { opacity: 1; visibility: visible; }
+  0%, 65% { opacity: 1; visibility: visible; }
   100%    { opacity: 0; visibility: hidden; }
 }
-#pj-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+#pj-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; background: #040618; }
 .pj-door {
   position: absolute; top: 0; width: 50%; height: 100%;
-  background: #06081a; z-index: 2; overflow: hidden;
+  z-index: 2; overflow: hidden;
   transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .pj-door::before {
   content: ''; position: absolute; inset: 0;
-  background: repeating-linear-gradient(to bottom, transparent 0, transparent 36px, #ffffff03 36px, #ffffff03 37px);
+  background:
+    /* Horizontal panel seams */
+    repeating-linear-gradient(to bottom, transparent 0, transparent 36px, #ffffff04 36px, #ffffff04 37px),
+    /* Subtle vertical brushed-metal grain */
+    repeating-linear-gradient(90deg, transparent 0, transparent 1px, #ffffff01 1px, #ffffff01 2px);
+  z-index: 1; pointer-events: none;
 }
 .pj-door-l { left: 0; border-right: 1px solid #b44affaa; }
 .pj-door-r { right: 0; border-left: 1px solid #b44affaa; }
+.pj-door-window {
+  position: absolute;
+  top: 20%; width: 55%; height: 45%;
+  border: 1px solid #ffffff12;
+  border-radius: 4px;
+  box-shadow: inset 0 0 30px #00e5ff08, 0 0 8px #00000066;
+  z-index: 3;
+  background: rgba(4,6,24,0.15);
+}
+.pj-door-l .pj-door-window { right: 18%; }
+.pj-door-r .pj-door-window { left: 18%; }
+
+/* Vertical grip handle */
+.pj-door-grip {
+  position: absolute; top: 40%; height: 18%; width: 4px;
+  background: linear-gradient(to bottom, #1a2050, #2a3478, #1a2050);
+  border-radius: 2px; z-index: 2;
+  box-shadow: 0 0 4px #00000044;
+}
+.pj-door-l .pj-door-grip { right: 8%; }
+.pj-door-r .pj-door-grip { left: 8%; }
+
+/* Rubber seal on inner edge */
+.pj-door-seal {
+  position: absolute; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(to bottom, #0a0c1e, #10142e 30%, #10142e 70%, #0a0c1e);
+  z-index: 2;
+}
+.pj-door-l .pj-door-seal { right: 0; border-left: 1px solid #1a1e40; }
+.pj-door-r .pj-door-seal { left: 0; border-right: 1px solid #1a1e40; }
+
+/* Warning text at bottom */
+.pj-door-warn {
+  position: absolute; bottom: 18%; left: 0; right: 0;
+  text-align: center; z-index: 2;
+  font-family: 'Rajdhani', sans-serif; font-size: 0.55rem;
+  letter-spacing: 0.15em; color: #ffb34730;
+}
+
+/* Door background painted via ::after so window stays transparent */
+.pj-door::after {
+  content: ''; position: absolute; inset: 0;
+  background: #06081a;
+  z-index: 0;
+}
+.pj-door-l::after {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 100%, 0% 100%,
+    0% 0%, 27% 20%, 27% 65%, 82% 65%, 82% 20%, 27% 20%
+  );
+}
+.pj-door-r::after {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 100%, 0% 100%,
+    0% 0%, 18% 20%, 18% 65%, 73% 65%, 73% 20%, 18% 20%
+  );
+}
 .pj-door-l.open { transform: translateX(-102%); }
 .pj-door-r.open { transform: translateX(102%); }
 .pj-door-label {
@@ -949,10 +1011,10 @@
   position: fixed; top: 1.2rem; left: 1.5rem;
   z-index: 20; font-family: 'Orbitron', monospace;
   font-size: 0.6rem; letter-spacing: 0.2em;
-  color: #3a3470; text-decoration: none;
+  color: #9098c0; text-decoration: none;
   text-transform: uppercase; transition: color 0.3s;
 }
-.pj-back:hover { color: #ff2d95; }
+.pj-back:hover { color: #ffffff; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {

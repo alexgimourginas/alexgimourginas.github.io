@@ -251,13 +251,13 @@ if (introCanvas) {
   introCtx = introCanvas.getContext('2d');
   introCanvas.width = W(); introCanvas.height = H();
   const cols = ['#b44aff','#ff2d95','#00e5ff','#ffb347','#33ff88','#ffffff'];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 120; i++) {
     introStreaks.push({
-      x: rand(-W(), W() * 2), y: rand(0, H()),
-      w: rand(50, W() * 0.4), h: rand(0.5, 3),
-      speed: rand(18, 50),
+      x: rand(-W() * 0.5, W() * 1.5), y: rand(0, H()),
+      w: rand(80, W() * 0.5), h: rand(1, 4),
+      speed: rand(40, 100),
       color: cols[Math.floor(rand(0, cols.length))],
-      opacity: rand(0.03, 0.3),
+      opacity: rand(0.05, 0.35),
     });
   }
 }
@@ -267,29 +267,38 @@ function runIntro(ts) {
   if (!introStart) introStart = ts;
   const elapsed = ts - introStart;
 
-  if (elapsed >= 1100) {
+  if (elapsed >= 900) {
     introActive = false;
     introEl.style.display = 'none';
+    document.querySelector('.pj-scene').classList.add('pj-scene-in');
     return;
   }
 
-  const decel = elapsed < 250 ? 1 : Math.max(0, 1 - (elapsed - 250) / 200);
+  const decel = elapsed < 200 ? 1 : Math.max(0, 1 - (elapsed - 200) / 150);
 
-  if (elapsed >= 400) {
+  if (elapsed >= 350) {
     const dL = introEl.querySelector('.pj-door-l');
     const dR = introEl.querySelector('.pj-door-r');
-    if (dL && !dL.classList.contains('open')) { dL.classList.add('open'); dR.classList.add('open'); }
+    if (dL && !dL.classList.contains('open')) {
+      dL.classList.add('open'); dR.classList.add('open');
+      document.querySelector('.pj-scene').classList.add('pj-scene-in');
+    }
   }
-  if (elapsed >= 750) {
-    introEl.style.opacity = String(1 - (elapsed - 750) / 350);
+  if (elapsed >= 550) {
+    introEl.style.opacity = String(1 - (elapsed - 550) / 350);
   }
 
+  // Fade canvas out once streaks stop (decel=0), over ~200ms
+  const canvasFade = decel > 0 ? 1 : Math.max(0, 1 - (elapsed - 350) / 200);
+  introCanvas.style.opacity = canvasFade;
+
+  // Full opaque clear — trail comes from streak width, not transparency
   introCtx.fillStyle = '#040618';
   introCtx.fillRect(0, 0, introCanvas.width, introCanvas.height);
   for (const s of introStreaks) {
     introCtx.fillStyle = s.color;
-    introCtx.globalAlpha = s.opacity * (0.25 + decel * 0.75);
-    introCtx.fillRect(s.x, s.y, s.w * (0.12 + decel * 0.88), s.h);
+    introCtx.globalAlpha = s.opacity * (0.3 + decel * 0.7);
+    introCtx.fillRect(s.x, s.y, s.w * (0.25 + decel * 0.75), s.h);
     s.x -= s.speed * decel;
     if (s.x + s.w < -80) { s.x = W() + rand(0, 200); s.y = rand(0, H()); }
   }
@@ -302,6 +311,7 @@ function skipIntro() {
   introActive = false;
   introEl.style.transition = 'opacity 0.25s';
   introEl.style.opacity = '0';
+  document.querySelector('.pj-scene').classList.add('pj-scene-in');
   setTimeout(() => { introEl.style.display = 'none'; }, 260);
 }
 introEl.addEventListener('click', skipIntro);
