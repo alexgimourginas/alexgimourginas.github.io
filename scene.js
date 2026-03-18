@@ -412,9 +412,24 @@ setTimeout(positionNeonSVG, 700);
 
 // ── NAV ENTRANCE ANIMATION ──
 if (navSignsEl) {
-  navSignsEl.querySelectorAll('.nav-sign').forEach((s, i) => {
+  const navBtns = navSignsEl.querySelectorAll('.nav-sign');
+  navBtns.forEach((s, i) => {
     setTimeout(() => s.classList.add('visible'), 1200 + i * 150);
   });
+
+  // Random scarce glitch on nav buttons
+  function scheduleGlitch() {
+    const delay = 3000 + Math.random() * 8000; // 3-11s between glitches
+    setTimeout(() => {
+      const btn = navBtns[Math.floor(Math.random() * navBtns.length)];
+      if (btn.classList.contains('visible')) {
+        btn.classList.add('hs-glitch');
+        btn.addEventListener('animationend', () => btn.classList.remove('hs-glitch'), { once: true });
+      }
+      scheduleGlitch();
+    }, delay);
+  }
+  setTimeout(scheduleGlitch, 4000);
 }
 
 // ── FOG ──
