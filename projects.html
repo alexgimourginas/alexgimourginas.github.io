@@ -6,17 +6,198 @@
   <title>Projects — Neon District</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="projects.css">
 </head>
 <body>
-  <div class="sub-page">
-    <div class="sub-page-header">
-      <h1 class="sub-page-title">Projects</h1>
-      <div class="sub-page-hr"></div>
+
+  <!-- ── TRAM INTRO ── -->
+  <div id="pj-intro" aria-hidden="true">
+    <canvas id="pj-intro-canvas"></canvas>
+    <div class="pj-door pj-door-l"><div class="pj-door-label">LINE 9 ·· TERMINUS</div></div>
+    <div class="pj-door pj-door-r"><div class="pj-door-label">次の停留所 · NEON DIST.</div></div>
+    <div class="pj-intro-hud">
+      <span class="pj-intro-route">NEON EXPRESS</span>
+      <span class="pj-intro-dest">PROJECTS DISTRICT</span>
     </div>
-    <p class="sub-page-body">Coming soon to the district.</p>
-    <a href="index.html" class="back-link">&#8592; Back to Alley</a>
+    <span id="pj-skip-hint">TAP TO SKIP</span>
   </div>
+
+  <!-- ── SCENE ── -->
+  <div class="pj-scene">
+    <div class="pj-sky"></div>
+
+    <!-- BACKGROUND CITY — dense far layer -->
+    <div class="pj-bg-city" id="pj-bg-city"></div>
+
+    <!-- LEFT VALLEY -->
+    <div class="pj-valley pj-valley-left">
+      <div class="pj-vb pj-vb-l1">
+        <div class="pj-vb-pipe"></div>
+        <div class="pj-vb-pipe pj-vb-pipe2"></div>
+        <div class="pj-vb-ledge"></div>
+        <div class="pj-vb-ledge pj-vb-ledge2"></div>
+        <div class="pj-vb-sign pj-neon-pink">ネオン</div>
+        <div class="pj-vb-screen pj-glow-cyan"></div>
+        <div class="pj-vb-vent"></div>
+        <div class="pj-vb-win-row"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr2"><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr3"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr4"><span></span><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-mag"></div>
+        <div class="pj-holo-tri"></div>
+      </div>
+      <!-- TRAM — behind L1 (z5), over L2 (z3) -->
+      <div class="pj-tram-system">
+        <div class="pj-tram-rail"></div>
+        <div class="pj-tram">
+          <div class="pj-tram-body">
+            <div class="pj-tram-window"></div>
+            <div class="pj-tram-window pj-tw2"></div>
+            <div class="pj-tram-window pj-tw3"></div>
+            <div class="pj-tram-light"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pj-vb pj-vb-l2">
+        <div class="pj-vb-antenna"></div>
+        <div class="pj-vb-ledge"></div>
+        <div class="pj-vb-sign pj-neon-green">酒場</div>
+        <div class="pj-vb-win-row"><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr2"><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr3"><span></span><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-cyan"></div>
+        <div class="pj-vb-stripe pj-stripe-purple pj-vs2"></div>
+        <div class="pj-vb-screen pj-glow-purple pj-scr2"></div>
+        <div class="pj-holo-diamond"></div>
+        <div class="pj-vb-kanji">夢</div>
+      </div>
+      <div class="pj-vb pj-vb-l3">
+        <div class="pj-vb-antenna pj-ant2"></div>
+        <div class="pj-vb-pipe pj-vb-pipe3"></div>
+        <div class="pj-vb-sign pj-neon-amber">HOTEL</div>
+        <div class="pj-vb-win-row"><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr2"><span></span><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-amber"></div>
+        <div class="pj-vb-neon-ring"></div>
+        <div class="pj-holo-bars"><span></span><span></span><span></span></div>
+      </div>
+      <div class="pj-vb pj-vb-l4">
+        <div class="pj-vb-win-row"><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-green"></div>
+        <div class="pj-vb-kanji pj-vb-kanji2">闇</div>
+      </div>
+    </div>
+
+    <!-- RIGHT VALLEY -->
+    <div class="pj-valley pj-valley-right">
+      <div class="pj-vb pj-vb-r1">
+        <div class="pj-vb-pipe pj-vb-pipe-r"></div>
+        <div class="pj-vb-pipe pj-vb-pipe-r pj-vb-pipe2"></div>
+        <div class="pj-vb-ledge"></div>
+        <div class="pj-vb-ledge pj-vb-ledge2"></div>
+        <div class="pj-vb-sign pj-neon-cyan">電脳</div>
+        <div class="pj-vb-screen pj-glow-pink"></div>
+        <div class="pj-vb-win-row pj-wr-right"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr-right pj-wr2"><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr-right pj-wr3"><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr-right pj-wr4"><span></span><span></span><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-pink pj-vsr"></div>
+        <div class="pj-vb-neon-circle"></div>
+        <div class="pj-holo-hex"></div>
+      </div>
+      <div class="pj-vb pj-vb-r2">
+        <div class="pj-vb-antenna pj-ant-r"></div>
+        <div class="pj-vb-ledge"></div>
+        <div class="pj-vb-sign pj-neon-purple">BAR</div>
+        <div class="pj-vb-win-row pj-wr-right"><span></span><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr-right pj-wr2"><span></span><span></span></div>
+        <div class="pj-vb-win-row pj-wr-right pj-wr3"><span></span><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-cyan pj-vsr"></div>
+        <div class="pj-vb-vent pj-vent-r"></div>
+        <div class="pj-holo-cross"></div>
+        <div class="pj-vb-kanji">魂</div>
+      </div>
+      <div class="pj-vb pj-vb-r3">
+        <div class="pj-vb-pipe pj-vb-pipe-r pj-vb-pipe3"></div>
+        <div class="pj-vb-sign pj-neon-amber">24H</div>
+        <div class="pj-vb-win-row pj-wr-right"><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-mag pj-vsr"></div>
+        <div class="pj-vb-screen pj-glow-green pj-scr2"></div>
+        <div class="pj-holo-bars pj-holo-bars-r"><span></span><span></span><span></span></div>
+      </div>
+      <div class="pj-vb pj-vb-r4">
+        <div class="pj-vb-win-row pj-wr-right"><span></span><span></span></div>
+        <div class="pj-vb-stripe pj-stripe-purple pj-vsr"></div>
+      </div>
+    </div>
+
+    <!-- AIRCRAFT -->
+    <div class="pj-aircraft pj-aircraft-1" aria-hidden="true">
+      <div class="pj-ac-body">
+        <div class="pj-ac-wing-l"></div>
+        <div class="pj-ac-wing-r"></div>
+        <div class="pj-ac-tail"></div>
+        <div class="pj-ac-light pj-ac-light-nav"></div>
+        <div class="pj-ac-light pj-ac-light-tail"></div>
+        <div class="pj-ac-thruster"></div>
+      </div>
+    </div>
+    <div class="pj-aircraft pj-aircraft-2" aria-hidden="true">
+      <div class="pj-ac-body">
+        <div class="pj-ac-wing-l"></div>
+        <div class="pj-ac-wing-r"></div>
+        <div class="pj-ac-tail"></div>
+        <div class="pj-ac-light pj-ac-light-nav"></div>
+        <div class="pj-ac-light pj-ac-light-tail"></div>
+        <div class="pj-ac-thruster"></div>
+      </div>
+    </div>
+
+    <!-- AMBIENT LIFE -->
+    <div class="pj-stars" id="pj-stars"></div>
+    <div class="pj-particles" id="pj-particles"></div>
+    <div class="pj-searchlights">
+      <div class="pj-beam pj-beam-1"></div>
+      <div class="pj-beam pj-beam-2"></div>
+    </div>
+
+    <!-- FOCAL BUILDING — grounded, extends below viewport -->
+    <div class="pj-focal">
+      <div class="pj-focal-top">
+        <div class="pj-focal-tier pj-focal-tier1"></div>
+        <div class="pj-focal-tier pj-focal-tier2">
+          <div class="pj-focal-tier-glow"></div>
+        </div>
+        <div class="pj-focal-tier pj-focal-tier3">
+          <div class="pj-focal-tier-strip"></div>
+          <div class="pj-focal-tier-strip pj-fts-r"></div>
+        </div>
+      </div>
+      <div class="pj-focal-body">
+        <div class="pj-focal-edge pj-focal-edge-l"></div>
+        <div class="pj-focal-edge pj-focal-edge-r"></div>
+        <div class="pj-focal-header">PROJECTS</div>
+        <div class="pj-projects" id="pj-projects"></div>
+      </div>
+      <div class="pj-focal-base">
+        <div class="pj-focal-base-lights">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Balcony -->
+    <div class="pj-balcony">
+      <div class="pj-railing-top"></div>
+      <div class="pj-railing-posts" id="pj-railing-posts"></div>
+      <div class="pj-railing-bottom"></div>
+      <div class="pj-balcony-floor"></div>
+    </div>
+  </div>
+
+  <a href="index.html" class="pj-back">&#8592; Back to Alley</a>
+  <script src="projects.js"></script>
 </body>
 </html>
