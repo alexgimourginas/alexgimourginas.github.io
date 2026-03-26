@@ -904,30 +904,59 @@
 .pj-focal-base-lights span:nth-child(10) { background:#33ff88; --ld:3.3s; }
 
 /* ── PROJECT CARDS ── */
-.pj-projects { display: flex; flex-direction: column; gap: 0.55rem; }
+.pj-projects { display: flex; flex-direction: column; gap: 0.7rem; }
 .pj-card {
-  position: relative; background: #01020c;
+  position: relative;
+  background: linear-gradient(170deg, var(--cc-in) 0%, rgba(1,2,12,0.65) 40%, rgba(1,2,12,0.55) 100%);
   border: 1px solid var(--cc); border-radius: 2px;
-  padding: 0.75rem 0.8rem; overflow: hidden; cursor: pointer;
+  padding: 0.75rem 0.8rem; overflow: visible; cursor: pointer;
   display: flex; flex-direction: column; gap: 0.25rem;
-  transition: box-shadow 0.3s, border-color 0.3s;
+  transition: box-shadow 0.4s, border-color 0.3s, transform 0.3s;
   text-decoration: none; color: inherit;
+  /* Holographic glow — color bleeds onto building */
+  box-shadow: 0 0 12px var(--cc-dim2), 0 0 30px var(--cc-dim2), inset 0 0 15px var(--cc-in);
+  animation: pj-holoFlicker var(--hf, 8s) ease-in-out infinite;
 }
 .pj-card:hover {
-  box-shadow: 0 0 24px var(--cc-dim), inset 0 0 35px var(--cc-in), 0 0 55px var(--cc-dim2);
+  box-shadow: 0 0 20px var(--cc-dim), 0 0 50px var(--cc-dim), 0 0 80px var(--cc-dim2), inset 0 0 30px var(--cc-in);
   border-color: var(--cc);
+  transform: translateY(-1px);
 }
+/* Projector emitter strip above each card */
 .pj-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 3px);
-  pointer-events: none; z-index: 2;
+  content: ''; position: absolute;
+  top: -4px; left: 10%; right: 10%; height: 3px;
+  background: var(--cc);
+  box-shadow: 0 0 8px var(--cc), 0 0 20px var(--cc-dim), 0 4px 15px var(--cc-dim2);
+  border-radius: 1px;
+  opacity: 0.7;
+  z-index: 3;
 }
+/* Scanlines + top gradient wash */
 .pj-card::after {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 90% 50% at 50% 0%, var(--cc) 0%, transparent 65%);
-  opacity: 0.04; pointer-events: none; transition: opacity 0.3s;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 3px),
+    radial-gradient(ellipse 90% 60% at 50% 0%, var(--cc) 0%, transparent 60%);
+  opacity: 0.12; pointer-events: none; transition: opacity 0.3s;
 }
-.pj-card:hover::after { opacity: 0.12; }
+.pj-card:hover::after { opacity: 0.22; }
+
+/* Holographic instability — subtle flicker */
+@keyframes pj-holoFlicker {
+  0%, 100% { opacity: 1; }
+  47%      { opacity: 1; }
+  48%      { opacity: 0.88; }
+  49%      { opacity: 1; }
+  73%      { opacity: 1; }
+  74%      { opacity: 0.92; }
+  75%      { opacity: 0.96; }
+  76%      { opacity: 1; }
+}
+.pj-card:nth-child(1) { --hf: 7s; }
+.pj-card:nth-child(2) { --hf: 9s; }
+.pj-card:nth-child(3) { --hf: 6.5s; }
+.pj-card:nth-child(4) { --hf: 8.5s; }
 .pj-card-kanji {
   position: absolute; top: -10%; right: 3%;
   font-family: 'Noto Sans SC', sans-serif; font-weight: 900;
@@ -943,7 +972,7 @@
   font-family: 'Orbitron', monospace; font-weight: 700;
   font-size: clamp(0.74rem,1.6vw,1.05rem);
   letter-spacing: 0.08em; color: var(--cc);
-  text-shadow: 0 0 14px var(--cc-dim); line-height: 1.2;
+  text-shadow: 0 0 10px var(--cc), 0 0 25px var(--cc-dim); line-height: 1.2;
 }
 .pj-card-sub {
   font-family: 'Rajdhani', sans-serif;
@@ -953,14 +982,15 @@
 .pj-card-desc {
   font-family: 'Rajdhani', sans-serif;
   font-size: clamp(0.66rem,1.1vw,0.85rem);
-  color: #6872a0; line-height: 1.4;
+  color: #8892b8; line-height: 1.4;
 }
 .pj-card-tags { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-top: 0.1rem; }
 .pj-tag {
   font-family: 'Orbitron', monospace; font-size: 0.42rem;
   letter-spacing: 0.08em; color: var(--cc);
   border: 1px solid var(--cc-dim); padding: 0.08rem 0.26rem;
-  border-radius: 1px; opacity: 0.55;
+  border-radius: 1px; opacity: 0.7;
+  text-shadow: 0 0 6px var(--cc-dim);
 }
 .pj-card-btns { display: flex; gap: 0.3rem; margin-top: 0.2rem; }
 .pj-btn {

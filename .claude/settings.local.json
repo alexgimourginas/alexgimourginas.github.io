@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(node_modules/.bin/vite build:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx vite:*)",
+      "Bash(ls -la projects.*)",
+      "Bash(gh run:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

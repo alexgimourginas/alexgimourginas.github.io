@@ -6,17 +6,283 @@
   <title>About — Neon District</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="about.css">
 </head>
 <body>
-  <div class="sub-page">
-    <div class="sub-page-header">
-      <h1 class="sub-page-title">About Me</h1>
-      <div class="sub-page-hr"></div>
+
+<!-- ═══════════════════════════════════
+     LOADER OVERLAY
+     ═══════════════════════════════════ -->
+<div id="ab-loader">
+  <div class="ab-ld-scanlines"></div>
+
+  <div class="ab-ld-inner">
+    <div class="ab-ld-header">
+      <div class="ab-ld-logo">NEON<span class="ab-ld-dot">·</span>DISTRICT</div>
+      <div class="ab-ld-ver">SYSTEM v2.077</div>
     </div>
-    <p class="sub-page-body">Coming soon to the district.</p>
-    <a href="index.html" class="back-link">&#8592; Back to Alley</a>
+    <div class="ab-ld-divider"></div>
+    <div class="ab-ld-term" id="ab-ld-term"></div>
+    <div class="ab-ld-bar-wrap">
+      <div class="ab-ld-bar" id="ab-ld-bar"></div>
+    </div>
+    <div class="ab-ld-pct" id="ab-ld-pct">0%</div>
   </div>
+
+  <!-- Corner brackets -->
+  <span class="ab-ld-c ab-ld-tl"></span>
+  <span class="ab-ld-c ab-ld-tr"></span>
+  <span class="ab-ld-c ab-ld-bl"></span>
+  <span class="ab-ld-c ab-ld-br"></span>
+</div>
+
+<!-- ═══════════════════════════════════
+     CAMERA PERSPECTIVE WRAPPER
+     ═══════════════════════════════════ -->
+<div id="ab-cam">
+<div class="ab-scene">
+
+  <!-- ═══ CEILING ═══ -->
+  <div class="ab-ceiling">
+    <div class="ab-ceil-strip"></div>
+  </div>
+
+  <!-- ═══ PENDANT LIGHTS (scene-level so they extend below ceiling) ═══ -->
+  <div class="ab-pendant" style="left:34%">
+    <div class="ab-pend-wire"></div>
+    <div class="ab-pend-bulb"></div>
+  </div>
+  <div class="ab-pendant" style="left:56%">
+    <div class="ab-pend-wire"></div>
+    <div class="ab-pend-bulb"></div>
+  </div>
+  <div class="ab-pendant" style="left:74%">
+    <div class="ab-pend-wire"></div>
+    <div class="ab-pend-bulb"></div>
+  </div>
+
+  <!-- ═══ BACK WALL + BAR ═══ -->
+  <div class="ab-backwall">
+
+    <!-- Neon diner sign -->
+    <div class="ab-sign">
+      <span class="ab-sign-w ab-sw-cyan">NEON</span>
+      <span class="ab-sign-dot">·</span>
+      <span class="ab-sign-w ab-sw-mag">DINER</span>
+    </div>
+
+    <!-- Mirror behind bar -->
+    <div class="ab-mirror">
+      <div class="ab-mirror-sheen"></div>
+      <div class="ab-mirror-gl ab-mgl-l"></div>
+      <div class="ab-mirror-gl ab-mgl-r"></div>
+    </div>
+
+    <!-- Shelf with machines & bottles -->
+    <div class="ab-shelf">
+      <div class="ab-mach ab-mach-a">
+        <div class="ab-mach-top"></div>
+        <div class="ab-mach-body">
+          <div class="ab-mach-panel"></div>
+        </div>
+        <div class="ab-mach-spout-wrap"><div class="ab-mach-spout"></div></div>
+        <div class="ab-mach-steam ab-ms1"></div>
+        <div class="ab-mach-steam ab-ms2"></div>
+      </div>
+      <div class="ab-bottle ab-btl-a"></div>
+      <div class="ab-bottle ab-btl-b"></div>
+      <div class="ab-mach ab-mach-b">
+        <div class="ab-mach-top"></div>
+        <div class="ab-mach-body">
+          <div class="ab-mach-panel">
+            <div class="ab-mach-led"></div>
+          </div>
+        </div>
+        <div class="ab-mach-spout-wrap ab-msw2">
+          <div class="ab-mach-spout"></div>
+          <div class="ab-mach-spout"></div>
+        </div>
+      </div>
+      <div class="ab-bottle ab-btl-c"></div>
+      <div class="ab-bottle ab-btl-d"></div>
+    </div>
+
+    <!-- Counter top + front -->
+    <div class="ab-counter">
+      <div class="ab-counter-top"></div>
+      <div class="ab-counter-front"></div>
+    </div>
+
+    <!-- Bar stools -->
+    <div class="ab-stools">
+      <div class="ab-stool"><div class="ab-stool-seat"></div><div class="ab-stool-leg"></div></div>
+      <div class="ab-stool"><div class="ab-stool-seat"></div><div class="ab-stool-leg"></div></div>
+      <div class="ab-stool"><div class="ab-stool-seat"></div><div class="ab-stool-leg"></div></div>
+      <div class="ab-stool"><div class="ab-stool-seat"></div><div class="ab-stool-leg"></div></div>
+      <div class="ab-stool"><div class="ab-stool-seat"></div><div class="ab-stool-leg"></div></div>
+    </div>
+
+  </div>
+
+  <!-- ═══ LEFT WINDOW ═══ -->
+  <div class="ab-left-panel">
+    <div class="ab-win-frame">
+      <canvas id="ab-rain" class="ab-win-canvas"></canvas>
+      <div class="ab-win-glow"></div>
+      <div class="ab-out-sign ab-os-1">餃</div>
+      <div class="ab-out-sign ab-os-2">BAR</div>
+    </div>
+    <div class="ab-booth-back"></div>
+  </div>
+
+  <!-- ═══ RIGHT WALL ═══ -->
+  <div class="ab-right-panel">
+    <div class="ab-rwall-panel"></div>
+  </div>
+
+  <!-- ═══ FLOOR STRIP ═══ -->
+  <div class="ab-floor"></div>
+
+  <!-- ═══ DINER FLOOR / TRANSITION ZONE ═══ -->
+  <div class="ab-diner-floor"></div>
+
+  <!-- ═══ TABLE ═══ -->
+  <div class="ab-table">
+    <div class="ab-tbl-glow"></div>
+    <div class="ab-tbl-sheen"></div>
+
+    <!-- Coffee cup -->
+    <div class="ab-cup">
+      <div class="ab-cup-steams">
+        <div class="ab-cst ab-cst-1"></div>
+        <div class="ab-cst ab-cst-2"></div>
+        <div class="ab-cst ab-cst-3"></div>
+      </div>
+      <div class="ab-cup-body">
+        <div class="ab-cup-coffee"></div>
+        <div class="ab-cup-rim"></div>
+      </div>
+      <div class="ab-cup-handle"></div>
+      <div class="ab-cup-saucer"></div>
+    </div>
+
+    <!-- ═══ THE DOCUMENT ═══ -->
+    <div class="ab-doc" id="ab-doc">
+
+      <!-- Header band -->
+      <div class="ab-doc-hdr">
+        <div class="ab-doc-hdr-l">
+          <span class="ab-doc-cls">CITIZEN FILE</span>
+          <span class="ab-doc-cls-div">|</span>
+          <span class="ab-doc-bureau">NEON DISTRICT BUREAU</span>
+        </div>
+        <div class="ab-doc-hdr-r">
+          <div class="ab-doc-id-top">NDC — 2077</div>
+          <div class="ab-doc-id-bot">AG // 001</div>
+        </div>
+      </div>
+
+      <!-- Name & title -->
+      <div class="ab-doc-title-wrap">
+        <h1 class="ab-doc-name">Alex Gimourginas</h1>
+        <p class="ab-doc-role">Developer &nbsp;&middot;&nbsp; Designer &nbsp;&middot;&nbsp; Creator</p>
+      </div>
+
+      <div class="ab-doc-rule"></div>
+
+      <!-- Body: two columns -->
+      <div class="ab-doc-body">
+
+        <div class="ab-col-main">
+
+          <div class="ab-doc-sec">
+            <div class="ab-sec-lbl">ABOUT</div>
+            <p class="ab-sec-txt">
+              Building at the intersection of engineering and aesthetics.
+              Interested in things that work cleanly and look sharp doing it —
+              whether that's a system architecture or a CSS animation.
+              Drawn to projects with personality.
+            </p>
+          </div>
+
+          <div class="ab-doc-sec">
+            <div class="ab-sec-lbl">SKILLS</div>
+            <div class="ab-tags">
+              <span class="ab-tag" style="--tc:#00b8cc">HTML / CSS</span>
+              <span class="ab-tag" style="--tc:#9040dd">JavaScript</span>
+              <span class="ab-tag" style="--tc:#cc2070">Python</span>
+              <span class="ab-tag" style="--tc:#cc8020">UI Design</span>
+              <span class="ab-tag" style="--tc:#1a9955">Vite</span>
+              <span class="ab-tag" style="--tc:#00b8cc">Git</span>
+            </div>
+          </div>
+
+          <div class="ab-doc-sec">
+            <div class="ab-sec-lbl">CURRENTLY</div>
+            <p class="ab-sec-txt ab-sec-txt-sm">
+              Building this district. Somewhere between a debugger and a sketchbook.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Side column: ID photo + links -->
+        <div class="ab-col-side">
+
+          <div class="ab-id-photo">
+            <svg viewBox="0 0 68 80" xmlns="http://www.w3.org/2000/svg" width="68" height="80">
+              <rect width="68" height="80" fill="#d8d4c8"/>
+              <circle cx="34" cy="26" r="17" fill="#aaa298"/>
+              <path d="M2,80 Q2,50 34,50 Q66,50 66,80Z" fill="#aaa298"/>
+              <line x1="0" y1="18" x2="68" y2="18" stroke="#00000010" stroke-width="1"/>
+              <line x1="0" y1="28" x2="68" y2="28" stroke="#00000010" stroke-width="1"/>
+              <line x1="0" y1="38" x2="68" y2="38" stroke="#00000010" stroke-width="1"/>
+              <line x1="0" y1="48" x2="68" y2="48" stroke="#00000010" stroke-width="1"/>
+              <line x1="0" y1="58" x2="68" y2="58" stroke="#00000010" stroke-width="1"/>
+              <line x1="0" y1="68" x2="68" y2="68" stroke="#00000010" stroke-width="1"/>
+              <polyline points="2,2 2,9 9,9" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+              <polyline points="66,2 66,9 59,9" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+              <polyline points="2,78 2,71 9,71" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+              <polyline points="66,78 66,71 59,71" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+              <rect x="0" y="0" width="68" height="2" fill="#00aabb28">
+                <animate attributeName="y" values="0;78;0" dur="3s" repeatCount="indefinite"/>
+              </rect>
+            </svg>
+          </div>
+
+          <div class="ab-id-status">
+            <span class="ab-led"></span>
+            <span class="ab-led-txt">ACTIVE</span>
+          </div>
+
+          <div class="ab-id-links">
+            <a href="https://github.com/alexgimourginas" target="_blank" rel="noopener" class="ab-id-link">GitHub</a>
+            <a href="https://linkedin.com/in/alexgimourginas" target="_blank" rel="noopener" class="ab-id-link">LinkedIn</a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ab-doc-rule"></div>
+
+      <!-- Footer -->
+      <div class="ab-doc-foot">
+        <a href="index.html" class="ab-doc-back">&#8592; BACK TO DISTRICT</a>
+        <div class="ab-barcode">
+          <div class="ab-bc-lines"></div>
+          <div class="ab-bc-num">2077-AG-001</div>
+        </div>
+      </div>
+
+    </div><!-- /ab-doc -->
+
+  </div><!-- /ab-table -->
+
+</div><!-- /ab-scene -->
+</div><!-- /ab-cam -->
+
+<script type="module" src="about.js"></script>
 </body>
 </html>
