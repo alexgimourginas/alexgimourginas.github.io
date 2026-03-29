@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rooftop — Concept v3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #020408; overflow: hidden; width: 100vw; height: 100vh; }
+
+    /* ── SCENE ─────────────────────────────────────────── */
+    #scene {
+      position: fixed; inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    #scene.visible { opacity: 1; }
+
+    /* ── SKY ───────────────────────────────────────────── */
+    #sky {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 25% at 40% 100%, rgba(60,100,200,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 18% at 70% 100%, rgba(80,60,180,0.05) 0%, transparent 60%),
+        linear-gradient(180deg,
+          #010308  0%,
+          #02050e 15%,
+          #040a18 35%,
+          #060e22 60%,
+          #09122a 80%,
+          #0c162e 100%
+        );
+    }
+
+    /* ── MOON ──────────────────────────────────────────── */
+    #moon {
+      position: absolute; top: 6%; right: 28%;
+      width: 42px; height: 42px; border-radius: 50%; overflow: hidden;
+      background: radial-gradient(ellipse at 38% 32%, #e8eee4 0%, #ccddc8 40%, #b0c8ac 100%);
+      box-shadow: 0 0 18px rgba(200,225,195,0.18), 0 0 55px rgba(155,195,150,0.08);
+    }
+    #moon::after {
+      content: ''; position: absolute; top: -5px; right: -4px;
+      width: 40px; height: 40px; border-radius: 50%; background: #040a18;
+    }
+
+    /* ── STARS ─────────────────────────────────────────── */
+    #stars { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+    /* ── CANVAS: CITY SCENE ────────────────────────────── */
+    /* One canvas handles background buildings, top-down buildings, fog */
+    #city-canvas {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 2;
+    }
+
+    /* ── RAIN ──────────────────────────────────────────── */
+    #rain { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+
+    /* ── ROOFTOP FLOOR (6% at bottom) ──────────────────── */
+    #rooftop {
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 7vh;
+      z-index: 9;
+      background:
+        repeating-linear-gradient(91deg,
+          transparent 0 4px, rgba(255,255,255,0.008) 4px 5px, transparent 5px 38px),
+        repeating-linear-gradient(1deg,
+          transparent 0 4px, rgba(255,255,255,0.006) 4px 5px, transparent 5px 28px),
+        radial-gradient(ellipse 70% 60% at 50% 0%, rgba(60,90,200,0.04) 0%, transparent 70%),
+        linear-gradient(180deg, #141820 0%, #0f1318 100%);
+      overflow: hidden;
+    }
+    #rooftop::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: #1a2030;
+      border-top: 1px solid rgba(80,120,220,0.14);
+      box-shadow: 0 0 8px rgba(80,120,220,0.06);
+    }
+    #rooftop::after {
+      content: ''; position: absolute; top: 2px; left: 0; right: 0; height: 1px;
+      background: repeating-linear-gradient(90deg,
+        transparent 0 22px, rgba(80,140,255,0.35) 22px 24px);
+    }
+
+    /* ── LAPTOP UNIT ───────────────────────────────────── */
+    #laptop-unit {
+      position: absolute;
+      bottom: 7vh;
+      left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      z-index: 10;
+      width: clamp(320px, 48vw, 780px);
+    }
+
+    /* ── SCREEN ────────────────────────────────────────── */
+    /* NO rotateX — keeps text crisp and legible */
+    #screen-lid {
+      width: 100%;
+      padding-bottom: 62.5%; /* 16:10 */
+      position: relative;
+      background: #080808;
+      border: 2px solid #2a2a2a;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      overflow: hidden;
+      box-shadow:
+        0 0 40px rgba(160,190,255,0.07),
+        0 0 100px rgba(140,170,255,0.04),
+        0 -10px 40px rgba(0,0,0,0.8);
+    }
+    /* No rotateX = no blur. Clean glare instead. */
+    #screen-lid::after {
+      content: ''; position: absolute; inset: 0; z-index: 30; pointer-events: none;
+      background: linear-gradient(118deg,
+        rgba(255,255,255,0.03) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 100%);
+    }
+    /* Screen glow bleeding down */
+    #screen-glow {
+      position: absolute; bottom: -18px; left: 5%; right: 5%; height: 18px;
+      background: radial-gradient(ellipse, rgba(190,210,255,0.10) 0%, transparent 70%);
+      filter: blur(8px); pointer-events: none; z-index: -1;
+    }
+
+    #screen { position: absolute; inset: 0; overflow: hidden; }
+
+    /* ── KEYBOARD ──────────────────────────────────────── */
+    #keyboard {
+      width: 100%;
+      height: clamp(11px, 1.9vw, 24px);
+      background: linear-gradient(180deg, #1e1e1e 0%, #141414 100%);
+      border: 2px solid #252525; border-top: none;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.75);
+      position: relative;
+    }
+    #keyboard::before {
+      content: ''; position: absolute; inset: 22% 5%;
+      background: repeating-linear-gradient(90deg,
+        rgba(255,255,255,0.02) 0 2px, transparent 2px 8px);
+    }
+    #keyboard::after {
+      content: ''; position: absolute; bottom: 14%; left: 36%; right: 36%; height: 44%;
+      border: 1px solid rgba(255,255,255,0.04); border-radius: 2px;
+    }
+
+    /* ── DESK ──────────────────────────────────────────── */
+    #desk-surface {
+      width: clamp(380px, 62vw, 980px);
+      height: clamp(10px, 1.5vw, 20px);
+      background: linear-gradient(180deg, #222220 0%, #181816 100%);
+      border: 1px solid #323230; border-radius: 2px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.65);
+      position: relative; z-index: 1;
+    }
+    /* Subtle edge highlight on desk */
+    #desk-surface::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent);
+    }
+    /* Solid pedestal box instead of legs */
+    #desk-pedestal {
+      width: clamp(260px, 44vw, 720px);
+      height: clamp(20px, 3.8vw, 52px);
+      background: linear-gradient(180deg, #28282c 0%, #1e1e22 50%, #18181c 100%);
+      border: 1px solid #38383e;
+      border-top: none;
+      border-radius: 0 0 3px 3px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.7);
+      position: relative;
+    }
+    /* Subtle inset lines on the pedestal face */
+    #desk-pedestal::before {
+      content: ''; position: absolute; inset: 20% 10%;
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 1px;
+    }
+
+
+    /* ── SCREEN: BOOT TERMINAL ─────────────────────────── */
+    #scr-boot {
+      position: absolute; inset: 0;
+      background: #060410;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: clamp(8px, 1.5vw, 20px);
+      transition: opacity 0.5s ease;
+    }
+    #scr-boot.out { opacity: 0; pointer-events: none; }
+
+    .bt-bar-top {
+      position: absolute; top: 0; left: 0; right: 0; padding: 5px 9px;
+      background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; gap: 5px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .bt-d { width: 6px; height: 6px; border-radius: 50%; }
+    .bt-d-r{background:#ff5f57} .bt-d-y{background:#febc2e} .bt-d-g{background:#28c840}
+    .bt-title { font-family:'Share Tech Mono',monospace; font-size: clamp(0.4rem,0.65vw,0.6rem); letter-spacing:0.14em; color:rgba(100,180,255,0.55); margin-left:5px; }
+
+    .bt-scan {
+      position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,0.09) 2px 4px);
+    }
+
+    #bt-lines {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(0.5rem, 0.85vw, 0.75rem);
+      line-height: 1.85; color: #aaccff; letter-spacing: 0.02em;
+      position: relative; z-index: 2;
+    }
+    .bt-row { display: flex; align-items: baseline; opacity: 0; animation: rowin 0.1s ease forwards; }
+    @keyframes rowin { from{opacity:0;transform:translateX(-5px)} to{opacity:1;transform:none} }
+    .bt-lbl { flex-shrink: 0; }
+    .bt-dots { flex: 1; border-bottom: 1px dotted rgba(140,180,255,0.12); position: relative; top: -0.3em; margin: 0 6px; min-width: 8px; }
+    .bt-st { flex-shrink: 0; font-weight: bold; }
+    .bt-cur { display:inline-block; width:7px; height:0.9em; background:#aaccff; vertical-align:text-bottom; margin-left:2px; animation:blink .65s step-end infinite; }
+    @keyframes blink { 50%{opacity:0} }
+
+    .bt-prog-wrap { height: 3px; background: rgba(80,130,255,0.08); border: 1px solid rgba(80,130,255,0.18); border-radius: 1px; overflow: hidden; margin-top: 7px; }
+    .bt-prog { height: 100%; width: 0%; background: linear-gradient(90deg, #00e5ff, #8060ff 60%, #ff2d95); box-shadow: 0 0 8px rgba(80,150,255,0.5); transition: width .28s linear; }
+    .bt-pct-txt { font-family:'Orbitron',monospace; font-size: clamp(0.32rem,0.48vw,0.42rem); letter-spacing:.2em; color:rgba(80,150,255,0.45); text-align:right; margin-top:2px; }
+
+    /* ── SCREEN: ABOUT ME ──────────────────────────────── */
+    #scr-about {
+      position: absolute; inset: 0;
+      background: #f8f5ec;
+      display: flex; flex-direction: column;
+      opacity: 0; transition: opacity 0.8s ease;
+      /* Crisp rendering — no 3D transforms on this element */
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    #scr-about.on { opacity: 1; }
+
+    .ab-topbar {
+      background: #18162c; padding: 5px 10px;
+      display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+    }
+    .ab-dots { display:flex; gap:4px; }
+    .ab-d { width:6px; height:6px; border-radius:50%; }
+    .ab-d-r{background:#ff5f57} .ab-d-y{background:#febc2e} .ab-d-g{background:#28c840}
+    .ab-fname { font-family:'Share Tech Mono',monospace; font-size: clamp(0.38rem,0.65vw,0.58rem); letter-spacing:.12em; color:rgba(255,160,30,0.8); }
+
+    .ab-body {
+      padding: clamp(8px,1.2vw,16px) clamp(10px,1.4vw,18px);
+      flex: 1; overflow: hidden;
+      display: flex; flex-direction: column; gap: clamp(5px,0.8vw,10px);
+    }
+
+    .ab-name {
+      font-family:'Orbitron',monospace; font-weight:900;
+      font-size: clamp(1rem,1.9vw,1.6rem);
+      letter-spacing:.04em; color:#0d0b1e; line-height:1.05; margin-bottom:1px;
+    }
+    .ab-role {
+      font-family:'Rajdhani',sans-serif; font-weight:600;
+      font-size: clamp(0.6rem,1vw,0.88rem);
+      letter-spacing:.14em; color:#3a3050;
+    }
+
+    .ab-divider { height:1px; background:#0d0b1e22; flex-shrink:0; }
+
+    .ab-cols { display:flex; gap: clamp(8px,1.2vw,16px); flex:1; min-height:0; }
+    .ab-col-main { flex:1; display:flex; flex-direction:column; gap: clamp(5px,0.8vw,10px); }
+
+    .ab-sec-label {
+      font-family:'Orbitron',monospace; font-weight:700;
+      font-size: clamp(0.38rem,0.62vw,0.54rem);
+      letter-spacing:.3em; color:#7030aa; margin-bottom:2px;
+    }
+    .ab-sec-body {
+      font-family:'Rajdhani',sans-serif; font-weight:600;
+      font-size: clamp(0.58rem,1vw,0.88rem);
+      line-height:1.45; color:#1a1430;
+    }
+    .ab-sec-body-i { color:#3a3050; font-style:italic; }
+
+    .ab-tags { display:flex; flex-wrap:wrap; gap:3px; }
+    .ab-tag {
+      font-family:'Orbitron',monospace;
+      font-size: clamp(0.32rem,0.5vw,0.44rem);
+      letter-spacing:.06em; color:var(--tc); border:1px solid var(--tc);
+      padding:2px 5px; border-radius:1px; opacity:.85;
+    }
+
+    .ab-col-side {
+      width: clamp(65px,8vw,105px);
+      display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0;
+    }
+    .ab-photo { border:2px solid #18162c; border-radius:1px; overflow:hidden; }
+    .ab-photo svg { display:block; }
+
+    .ab-status { display:flex; align-items:center; gap:4px; }
+    .ab-led { width:6px; height:6px; border-radius:50%; background:#22cc66; box-shadow:0 0 5px #22cc66; animation:lpulse 2s ease-in-out infinite; }
+    @keyframes lpulse { 0%,100%{opacity:1}50%{opacity:.3} }
+    .ab-led-txt { font-family:'Orbitron',monospace; font-size:.38rem; letter-spacing:.2em; color:#22cc66; }
+
+    .ab-links { display:flex; flex-direction:column; gap:3px; width:100%; }
+    .ab-link {
+      font-family:'Orbitron',monospace;
+      font-size: clamp(0.3rem,0.46vw,0.4rem);
+      letter-spacing:.12em; color:#18162c; text-decoration:none;
+      padding:2px 5px; border:1px solid #18162c40; border-radius:1px; text-align:center;
+      transition:background .18s,color .18s;
+    }
+    .ab-link:hover { background:#18162c; color:#ff9020; }
+
+    .ab-footer {
+      border-top:1px solid #0d0b1e18; padding:4px 10px;
+      display:flex; justify-content:space-between; align-items:center; flex-shrink:0;
+    }
+    .ab-back {
+      font-family:'Orbitron',monospace; font-weight:700;
+      font-size: clamp(0.32rem,0.5vw,0.44rem);
+      letter-spacing:.18em; color:#18162c; text-decoration:none;
+    }
+    .ab-back:hover { color:#7030aa; }
+    .ab-coords {
+      font-family:'Share Tech Mono',monospace;
+      font-size: clamp(0.28rem,0.4vw,0.36rem);
+      color:#18162c40;
+    }
+
+    /* ── OVERLAY ────────────────────────────────────────── */
+    #overlay {
+      position: absolute; inset: 0; z-index: 20; pointer-events: none;
+      background: radial-gradient(ellipse 140% 100% at 50% 50%, transparent 20%, rgba(1,3,6,0.45) 100%);
+    }
+
+    #devnote {
+      position: fixed; bottom: 10px; right: 12px; z-index: 99;
+      font-family:'Share Tech Mono',monospace; font-size:.45rem; letter-spacing:.1em;
+      color:rgba(80,140,255,0.2); pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+<div id="scene">
+  <div id="sky"></div>
+  <canvas id="stars"></canvas>
+  <div id="moon"></div>
+  <canvas id="city-canvas"></canvas>
+  <canvas id="rain"></canvas>
+
+  <!-- Rooftop floor strip -->
+  <div id="rooftop"></div>
+
+  <!-- Laptop on desk, sitting on rooftop -->
+  <div id="laptop-unit">
+    <div id="screen-lid">
+      <div id="screen">
+
+        <!-- Boot terminal -->
+        <div id="scr-boot">
+          <div class="bt-scan"></div>
+          <div class="bt-bar-top">
+            <div class="bt-d bt-d-r"></div>
+            <div class="bt-d bt-d-y"></div>
+            <div class="bt-d bt-d-g"></div>
+            <div class="bt-title">NEON.DISTRICT — BOOT SEQUENCE</div>
+          </div>
+          <div id="bt-lines"></div>
+          <div class="bt-prog-wrap"><div class="bt-prog" id="bt-prog"></div></div>
+          <div class="bt-pct-txt" id="bt-pct">0%</div>
+        </div>
+
+        <!-- About me -->
+        <div id="scr-about">
+          <div class="ab-topbar">
+            <div class="ab-dots">
+              <div class="ab-d ab-d-r"></div>
+              <div class="ab-d ab-d-y"></div>
+              <div class="ab-d ab-d-g"></div>
+            </div>
+            <div class="ab-fname">ALEX_GIMOURGINAS — PROFILE.TXT</div>
+            <div style="width:34px;"></div>
+          </div>
+          <div class="ab-body">
+            <div>
+              <div class="ab-name">Alex Gimourginas</div>
+              <div class="ab-role">Developer &nbsp;·&nbsp; Designer &nbsp;·&nbsp; Creator</div>
+            </div>
+            <div class="ab-divider"></div>
+            <div class="ab-cols">
+              <div class="ab-col-main">
+                <div>
+                  <div class="ab-sec-label">ABOUT</div>
+                  <div class="ab-sec-body">Building at the intersection of engineering and aesthetics. Interested in things that work cleanly and look sharp — whether that's a system architecture or a CSS animation. Drawn to projects with personality.</div>
+                </div>
+                <div>
+                  <div class="ab-sec-label">SKILLS</div>
+                  <div class="ab-tags">
+                    <span class="ab-tag" style="--tc:#0099bb">HTML / CSS</span>
+                    <span class="ab-tag" style="--tc:#8030cc">JavaScript</span>
+                    <span class="ab-tag" style="--tc:#bb1060">Python</span>
+                    <span class="ab-tag" style="--tc:#bb7010">UI Design</span>
+                    <span class="ab-tag" style="--tc:#1a9955">Vite</span>
+                    <span class="ab-tag" style="--tc:#0099bb">Git</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="ab-sec-label">CURRENTLY</div>
+                  <div class="ab-sec-body ab-sec-body-i">Building this district. Somewhere between a debugger and a sketchbook.</div>
+                </div>
+              </div>
+              <div class="ab-col-side">
+                <div class="ab-photo">
+                  <svg viewBox="0 0 68 80" xmlns="http://www.w3.org/2000/svg" width="68" height="80">
+                    <rect width="68" height="80" fill="#d8d4c8"/>
+                    <circle cx="34" cy="26" r="17" fill="#aaa298"/>
+                    <path d="M2,80 Q2,50 34,50 Q66,50 66,80Z" fill="#aaa298"/>
+                    <polyline points="2,2 2,9 9,9" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+                    <polyline points="66,2 66,9 59,9" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+                    <polyline points="2,78 2,71 9,71" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+                    <polyline points="66,78 66,71 59,71" fill="none" stroke="#0099aa" stroke-width="1.2"/>
+                    <rect x="0" y="0" width="68" height="2" fill="#00aabb28">
+                      <animate attributeName="y" values="0;78;0" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                  </svg>
+                </div>
+                <div class="ab-status"><div class="ab-led"></div><div class="ab-led-txt">ACTIVE</div></div>
+                <div class="ab-links">
+                  <a href="https://github.com/alexgimourginas" target="_blank" class="ab-link">GitHub</a>
+                  <a href="https://linkedin.com/in/alexgimourginas" target="_blank" class="ab-link">LinkedIn</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ab-footer">
+            <a href="index.html" class="ab-back">← BACK TO DISTRICT</a>
+            <div class="ab-coords">40.7128°N · 74.0060°W</div>
+          </div>
+        </div>
+
+      </div><!-- /screen -->
+      <div id="screen-glow"></div>
+    </div><!-- /screen-lid -->
+    <div id="keyboard"></div>
+    <div id="desk-surface"></div>
+    <div id="desk-pedestal"></div>
+  </div><!-- /laptop-unit -->
+
+  <div id="overlay"></div>
+</div><!-- /scene -->
+<div id="devnote">ROOFTOP CONCEPT v3</div>
+
+<script>
+const VW = window.innerWidth, VH = window.innerHeight;
+
+// ── STARS ────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('stars');
+  c.width = VW; c.height = VH;
+  const ctx = c.getContext('2d');
+  for (let i = 0; i < 220; i++) {
+    const x = Math.random() * VW;
+    const y = Math.random() * VH * 0.5;
+    const r = Math.random() * 0.8 + 0.12;
+    const a = Math.random() * 0.45 + 0.04;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${180+~~(Math.random()*50)},${195+~~(Math.random()*35)},${215+~~(Math.random()*30)},${a})`;
+    ctx.fill();
+  }
+})();
+
+
+// ── CITY CANVAS ──────────────────────────────────────────
+// Draws: tall background buildings, top-down buildings (below us), fog layers
+(function() {
+  const c = document.getElementById('city-canvas');
+  c.width = VW; c.height = VH;
+  const ctx = c.getContext('2d');
+
+  // ── 1. BACKGROUND SKYLINE (distant, vertical buildings, upper zone) ──
+  // These are the tops of very tall buildings at/above our level.
+  // Positioned so tops are visible in the upper 50% of the viewport.
+  // Neo-tokyo colors: orange, lime, white lights — NOT cyan/magenta heavy.
+  function drawSkylineLayer(buildings, baseColor, winColor1, winColor2, alphaMax, yBase) {
+    buildings.forEach(b => {
+      const top = yBase - b.h;
+      // Building silhouette
+      const grad = ctx.createLinearGradient(0, top, 0, yBase);
+      grad.addColorStop(0, b.haze || baseColor);
+      grad.addColorStop(1, baseColor);
+      ctx.fillStyle = grad;
+      ctx.fillRect(b.x, top, b.w, b.h);
+
+      // Setback
+      if (b.step) {
+        ctx.fillRect(b.x + b.step.at, top - b.step.h, b.step.w, b.step.h);
+      }
+
+      // Antenna
+      if (b.ant) {
+        ctx.strokeStyle = '#151820';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(b.x + b.w*0.5, top); ctx.lineTo(b.x + b.w*0.5, top - b.ant); ctx.stroke();
+        // Blinking light at tip (we animate this via requestAnimationFrame later)
+        b._antX = b.x + b.w * 0.5;
+        b._antY = top - b.ant;
+      }
+
+      // Windows
+      const CW = 6, CH = 5, CG = 5, VG = 7;
+      const cols = Math.floor((b.w - CG * 2) / (CW + CG));
+      const rows = Math.floor((b.h * 0.75) / (CH + VG));
+      for (let col = 0; col < cols; col++) {
+        for (let row = 2; row < rows; row++) {
+          if (Math.random() > 0.30) continue;
+          const wx = b.x + CG + col * (CW + CG);
+          const wy = top + VG * 2 + row * (CH + VG);
+          if (wy > yBase) continue;
+          const which = Math.random();
+          ctx.fillStyle = which < 0.60 ? winColor1
+                        : which < 0.85 ? winColor2
+                        : 'rgba(255,255,255,0.18)';
+          ctx.fillRect(wx, wy, CW, CH);
+        }
+      }
+
+      // Roof neon trim (top edge of building, neo-tokyo style)
+      if (b.neon) {
+        ctx.strokeStyle = b.neon;
+        ctx.lineWidth = 1;
+        ctx.shadowColor = b.neon;
+        ctx.shadowBlur = 6;
+        ctx.beginPath(); ctx.moveTo(b.x, top); ctx.lineTo(b.x + b.w, top); ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+    });
+  }
+
+  // Far buildings — drawn blurred to feel distant
+  ctx.save();
+  ctx.filter = 'blur(2.5px)';
+  const farY = VH * 0.48;
+  drawSkylineLayer([
+    {x:VW*0.14,w:28,h:160,haze:'#0b0f1c'},{x:VW*0.18,w:18,h:120},
+    {x:VW*0.22,w:40,h:200,ant:30,neon:'rgba(180,80,255,0.35)'},{x:VW*0.28,w:22,h:145},
+    {x:VW*0.34,w:50,h:230,step:{at:16,w:18,h:40}},{x:VW*0.42,w:30,h:175},
+    {x:VW*0.48,w:55,h:255,ant:45,neon:'rgba(0,200,255,0.30)'},{x:VW*0.56,w:38,h:190},
+    {x:VW*0.62,w:48,h:215},{x:VW*0.68,w:25,h:148},{x:VW*0.73,w:52,h:238,ant:35},
+    {x:VW*0.79,w:30,h:162},{x:VW*0.84,w:42,h:195,neon:'rgba(255,40,100,0.28)'},
+  ], '#0a0e1a', 'rgba(160,185,255,0.06)', 'rgba(80,160,255,0.05)', 0.08, farY);
+  ctx.filter = 'none';
+  ctx.restore();
+
+  // Mid buildings — slightly blurrier to suggest atmospheric distance
+  ctx.save();
+  ctx.filter = 'blur(1px)';
+  const midY = VH * 0.52;
+  drawSkylineLayer([
+    {x:VW*0.10,w:48,h:280,ant:50,haze:'#0e1228',neon:'rgba(180,60,255,0.45)'},{x:VW*0.18,w:34,h:205},
+    {x:VW*0.24,w:70,h:340,step:{at:24,w:26,h:60}},{x:VW*0.36,w:44,h:248},
+    {x:VW*0.44,w:60,h:310,ant:60,neon:'rgba(0,200,255,0.50)'},{x:VW*0.54,w:50,h:268},
+    {x:VW*0.60,w:80,h:365,step:{at:28,w:30,h:70},ant:55},{x:VW*0.72,w:45,h:240},
+    {x:VW*0.78,w:65,h:295,neon:'rgba(255,30,90,0.42)'},{x:VW*0.86,w:38,h:218},
+  ], '#0e1224', 'rgba(180,200,255,0.10)', 'rgba(80,140,255,0.07)', 0.16, midY);
+  ctx.filter = 'none';
+  ctx.restore();
+
+
+  // ── 2. TOP-DOWN BUILDINGS (below our elevation) ──────────
+  // These are buildings we're ABOVE, so we see their rooftops at an angle.
+  // Drawn as parallelograms — the roof face angled toward us, wall face below.
+  // They appear in the lower-center of the scene, below the fog.
+
+  function drawTopDownBuilding(ctx, bx, by, bw, roofD, wallH, roofCol, wallCol, skew, details) {
+    // Roof face (parallelogram)
+    ctx.beginPath();
+    ctx.moveTo(bx,         by);
+    ctx.lineTo(bx + bw,    by);
+    ctx.lineTo(bx + bw + skew, by - roofD);
+    ctx.lineTo(bx + skew,  by - roofD);
+    ctx.closePath();
+    ctx.fillStyle = roofCol;
+    ctx.fill();
+
+    // Roof edge highlight (near edge of roof)
+    ctx.beginPath();
+    ctx.moveTo(bx, by); ctx.lineTo(bx + bw, by);
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Near wall face (visible strip below roof-near-edge)
+    ctx.fillStyle = wallCol;
+    ctx.fillRect(bx, by, bw, wallH);
+
+    // Rooftop details: small HVAC/water tanks as dark dots
+    if (details) {
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      details.forEach(d => {
+        ctx.fillRect(bx + skew * 0.5 + d.ox, by - roofD * 0.5 + d.oy, d.w, d.h);
+      });
+    }
+
+    // Optional rooftop neon edge
+    if (details && details.neon) {
+      ctx.strokeStyle = details.neon;
+      ctx.lineWidth = 1;
+      ctx.shadowColor = details.neon;
+      ctx.shadowBlur = 5;
+      ctx.beginPath();
+      ctx.moveTo(bx + skew, by - roofD);
+      ctx.lineTo(bx + bw + skew, by - roofD);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  // Top-down zone: sits below the fog band, visible between fog + rooftop
+  // These buildings appear in the ~58-80% vertical zone
+  const tdZone = { top: VH * 0.60, bottom: VH * 0.82 };
+  const tdCenterX = VW * 0.5;
+
+  // Three size tiers: LARGE (close/tall), MEDIUM, SMALL (far/distant)
+  // [bx, by, bw, roofDepth, wallH, skew, neonCol, roofColor, wallColor]
+  const tdBuildings = [
+    // ── LARGE buildings (close, prominent) ──
+    [tdCenterX - VW*0.27, tdZone.bottom - VH*0.01, VW*0.12, 32, 14, 10, 'rgba(180,80,255,0.55)', '#0e1828', '#09101e'],
+    [tdCenterX - VW*0.08, tdZone.bottom - VH*0.02, VW*0.14, 34, 16, 11, null,                    '#0f1a2a', '#0a1220'],
+    [tdCenterX + VW*0.12, tdZone.bottom - VH*0.01, VW*0.11, 30, 13, 10, 'rgba(0,200,255,0.45)',  '#0e1828', '#09101e'],
+
+    // ── MEDIUM buildings (mid distance) ──
+    [tdCenterX - VW*0.32, tdZone.bottom - VH*0.10, VW*0.08, 18, 8, 6, null,                     '#111828', '#0c1320'],
+    [tdCenterX - VW*0.20, tdZone.bottom - VH*0.08, VW*0.09, 16, 7, 6, 'rgba(255,40,120,0.45)',  '#111828', '#0c1320'],
+    [tdCenterX - VW*0.04, tdZone.bottom - VH*0.12, VW*0.10, 20, 9, 7, null,                     '#101726', '#0b121e'],
+    [tdCenterX + VW*0.08, tdZone.bottom - VH*0.09, VW*0.09, 17, 8, 6, 'rgba(180,80,255,0.40)',  '#111828', '#0c1320'],
+    [tdCenterX + VW*0.22, tdZone.bottom - VH*0.07, VW*0.08, 15, 7, 5, null,                     '#111828', '#0c1320'],
+
+    // ── SMALL buildings (far, barely visible) ──
+    [tdCenterX - VW*0.28, tdZone.bottom - VH*0.20, VW*0.05, 8,  3, 3, null,                     '#141a2c', '#0f1424'],
+    [tdCenterX - VW*0.18, tdZone.bottom - VH*0.18, VW*0.06, 9,  4, 3, 'rgba(0,200,255,0.30)',   '#141a2c', '#0f1424'],
+    [tdCenterX + VW*0.02, tdZone.bottom - VH*0.22, VW*0.07, 10, 4, 4, null,                     '#141a2c', '#0f1424'],
+    [tdCenterX + VW*0.16, tdZone.bottom - VH*0.19, VW*0.05, 7,  3, 3, null,                     '#141a2c', '#0f1424'],
+    [tdCenterX + VW*0.28, tdZone.bottom - VH*0.17, VW*0.06, 8,  3, 3, 'rgba(255,40,120,0.30)',  '#141a2c', '#0f1424'],
+  ];
+
+  tdBuildings.forEach(([bx, by, bw, rd, wh, sk, neon, roofC, wallC]) => {
+    const details = neon ? [{ox:bw*0.3,oy:0,w:6,h:4},{ox:bw*0.6,oy:2,w:4,h:3}] : [{ox:bw*0.4,oy:1,w:5,h:3}];
+    if (neon) details.neon = neon;
+    drawTopDownBuilding(ctx, bx, by, bw, rd, wh, roofC, wallC, sk, details);
+  });
+
+  // ── 3. FOG / HAZE LAYERS ────────────────────────────────
+  // Dense atmospheric fog between the elevated skyline and the top-down buildings below.
+  // Neo-tokyo fog: tinted orange-green from the city lights below.
+
+  function fogLayer(yTop, height, color1, color2, alpha) {
+    const grad = ctx.createLinearGradient(0, yTop, 0, yTop + height);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.3, color1.replace('A', Math.round(alpha * 255).toString(16).padStart(2,'0')));
+    grad.addColorStop(0.65, color2.replace('A', Math.round(alpha * 0.75 * 255).toString(16).padStart(2,'0')));
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, yTop, VW, height);
+  }
+
+  // Primary fog bank — sits between buildings and top-down zone
+  const fogTop = VH * 0.44;
+  const fogH   = VH * 0.26;
+
+  ctx.save();
+  // Main fog — dark blue-grey, dense atmospheric haze
+  const fogGrad = ctx.createLinearGradient(0, fogTop, 0, fogTop + fogH);
+  fogGrad.addColorStop(0,    'rgba(0,0,0,0)');
+  fogGrad.addColorStop(0.20, 'rgba(50,70,115,0.12)');
+  fogGrad.addColorStop(0.45, 'rgba(55,78,128,0.32)');
+  fogGrad.addColorStop(0.65, 'rgba(45,65,108,0.22)');
+  fogGrad.addColorStop(0.85, 'rgba(35,52,90,0.12)');
+  fogGrad.addColorStop(1,    'rgba(0,0,0,0)');
+  ctx.fillStyle = fogGrad;
+  ctx.fillRect(0, fogTop, VW, fogH);
+
+  // Secondary thicker fog bank in the center
+  const fog2Grad = ctx.createRadialGradient(VW*0.5, fogTop + fogH*0.55, 0, VW*0.5, fogTop + fogH*0.55, VW*0.45);
+  fog2Grad.addColorStop(0,   'rgba(65,90,150,0.28)');
+  fog2Grad.addColorStop(0.4, 'rgba(50,72,125,0.16)');
+  fog2Grad.addColorStop(0.7, 'rgba(30,48,90,0.07)');
+  fog2Grad.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = fog2Grad;
+  ctx.fillRect(0, fogTop, VW, fogH);
+
+  // Lower fog (above top-down buildings)
+  const fog3Grad = ctx.createLinearGradient(0, VH*0.62, 0, VH*0.80);
+  fog3Grad.addColorStop(0,   'rgba(0,0,0,0)');
+  fog3Grad.addColorStop(0.4, 'rgba(40,58,100,0.16)');
+  fog3Grad.addColorStop(0.8, 'rgba(28,42,78,0.10)');
+  fog3Grad.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = fog3Grad;
+  ctx.fillRect(0, VH*0.62, VW, VH*0.18);
+  ctx.restore();
+
+  // ── 4. CITY GLOW ON HORIZON ──────────────────────────────
+  ctx.save();
+  const glowGrad = ctx.createRadialGradient(VW*0.38, VH*0.52, 0, VW*0.38, VH*0.52, VW*0.55);
+  glowGrad.addColorStop(0, 'rgba(100,70,220,0.07)');
+  glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, VH*0.25, VW, VH*0.4);
+
+  const glowGrad2 = ctx.createRadialGradient(VW*0.66, VH*0.55, 0, VW*0.66, VH*0.55, VW*0.4);
+  glowGrad2.addColorStop(0, 'rgba(0,150,255,0.06)');
+  glowGrad2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glowGrad2;
+  ctx.fillRect(0, VH*0.3, VW, VH*0.35);
+  ctx.restore();
+
+  // ── 5. NARROW SIDE BUILDINGS (flanking, at our level) ────
+  // Partial building faces on the edges — we see just the sides/tops of nearby buildings.
+  // NOT full columns — just edges giving the sense of surrounding structures.
+  function drawFlankEdge(x, w, isLeft) {
+    const grad = ctx.createLinearGradient(isLeft ? x+w : x, 0, isLeft ? x : x+w, 0);
+    grad.addColorStop(0, 'rgba(10,14,26,0.96)');
+    grad.addColorStop(1, 'rgba(10,14,26,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, 0, w, VH * 0.80);
+
+    // Window dots — cool blue/purple tones matching the palette
+    for (let wy = 80; wy < VH * 0.75; wy += 24) {
+      for (let wx = 0; wx < 6; wx++) {
+        if (Math.random() > 0.25) continue;
+        const px = isLeft ? x + w*0.15 + wx*14 : x + wx*14;
+        if (px < 0 || px > VW) continue;
+        const which = Math.random();
+        ctx.fillStyle = which < 0.5
+          ? `rgba(180,200,255,${0.06+Math.random()*0.10})`
+          : `rgba(${140+~~(Math.random()*40)},${80+~~(Math.random()*40)},255,${0.06+Math.random()*0.09})`;
+        ctx.fillRect(px, wy, 6, 5);
+      }
+    }
+
+    // Sharp inner edge line
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(isLeft ? x+w : x, 0);
+    ctx.lineTo(isLeft ? x+w : x, VH*0.8);
+    ctx.stroke();
+  }
+
+  drawFlankEdge(0, VW * 0.15, true);
+  drawFlankEdge(VW * 0.85, VW * 0.15, false);
+
+})();
+
+
+// ── RAIN ─────────────────────────────────────────────────
+(function() {
+  const c = document.getElementById('rain');
+  const ctx = c.getContext('2d');
+  let drops = [], raf;
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize();
+  function spawn(s) {
+    return {x:Math.random()*c.width, y:s?Math.random()*c.height:-20,
+            len:9+Math.random()*22, spd:10+Math.random()*8, a:0.05+Math.random()*0.18, w:0.5+Math.random()*0.4};
+  }
+  function init() { drops=[]; const n=Math.max(200,~~(c.width*c.height/1400)); for(let i=0;i<n;i++) drops.push(spawn(true)); }
+  init();
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = 'rgba(145,185,200,1)';
+    for (const d of drops) {
+      ctx.globalAlpha = d.a; ctx.lineWidth = d.w;
+      ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - d.len*0.08, d.y + d.len); ctx.stroke();
+      d.y += d.spd; d.x -= d.spd * 0.06;
+      if (d.y > c.height + d.len) Object.assign(d, spawn(false));
+    }
+    ctx.globalAlpha = 1; raf = requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize', () => { cancelAnimationFrame(raf); resize(); init(); draw(); });
+})();
+
+
+// ── BOOT SEQUENCE ────────────────────────────────────────
+const BOOT = [
+  { lbl:'AMBIENT.RAIN',         st:'INIT',    col:'#4488ff' },
+  { lbl:'CITY.GRID',            st:'SYNC',    col:'#4488ff' },
+  { lbl:'ROOFTOP.ENVIRON',      st:'BOOT',    col:'#4488ff' },
+  { lbl:'PROFILE.TXT [AG-001]', st:'DECRYPT', col:'#00e5ff' },
+  { lbl:'UPLINK.ONLINE',        st:'READY',   col:'#ff2d95' },
+];
+const TIMES = [150, 370, 590, 810, 990];
+const PROGS = [18, 40, 62, 84, 100];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const scene = document.getElementById('scene');
+  const boot  = document.getElementById('scr-boot');
+  const about = document.getElementById('scr-about');
+  const lines = document.getElementById('bt-lines');
+  const bar   = document.getElementById('bt-prog');
+  const pct   = document.getElementById('bt-pct');
+
+  const cursor = document.createElement('span');
+  cursor.className = 'bt-cur';
+  lines.appendChild(cursor);
+
+  function addLine(i) {
+    cursor.remove();
+    const row = document.createElement('div'); row.className = 'bt-row';
+    const lb  = document.createElement('span'); lb.className='bt-lbl'; lb.textContent=BOOT[i].lbl;
+    const dt  = document.createElement('span'); dt.className='bt-dots';
+    const st  = document.createElement('span'); st.className='bt-st'; st.style.color=BOOT[i].col; st.textContent=BOOT[i].st;
+    row.append(lb, dt, st); lines.appendChild(row);
+    bar.style.width = PROGS[i]+'%'; pct.textContent = PROGS[i]+'%';
+    if (i < BOOT.length - 1) lines.appendChild(cursor);
+  }
+
+  setTimeout(() => scene.classList.add('visible'), 120);
+  TIMES.forEach((t, i) => setTimeout(() => addLine(i), t + 250));
+
+  const done = TIMES[TIMES.length - 1] + 250 + 200;
+  setTimeout(() => {
+    boot.classList.add('out');
+    setTimeout(() => about.classList.add('on'), 520);
+  }, done);
+});
+</script>
+</body>
+</html>
