@@ -1038,13 +1038,13 @@
 
 /* ── CHROME ── */
 .pj-back {
-  position: fixed; top: 1.2rem; left: 1.5rem;
-  z-index: 20; font-family: 'Orbitron', monospace;
-  font-size: 0.6rem; letter-spacing: 0.2em;
-  color: #9098c0; text-decoration: none;
-  text-transform: uppercase; transition: color 0.3s;
+  position: fixed; top: 18px; left: 22px;
+  z-index: 100; font-family: 'Orbitron', monospace; font-weight: 700;
+  font-size: clamp(0.55rem, 0.8vw, 0.72rem); letter-spacing: 0.18em;
+  color: rgba(0,220,255,0.75); text-decoration: none;
+  text-shadow: 0 0 8px rgba(0,220,255,0.4); transition: color 0.3s, text-shadow 0.3s;
 }
-.pj-back:hover { color: #ffffff; }
+.pj-back:hover { color: #fff; text-shadow: 0 0 10px rgba(0,220,255,0.8); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
