@@ -62,19 +62,19 @@
       <!-- Tier 4 (top) -->
       <rect x="44" y="60" width="62" height="78" fill="#0a0b24" stroke="#16204a" stroke-width="0.7"/>
       <!-- Tier 3 -->
-      <rect x="28" y="158" width="94" height="88" fill="#090b22" stroke="#16204a" stroke-width="0.7"/>
+      <rect x="28" y="138" width="94" height="88" fill="#090b22" stroke="#16204a" stroke-width="0.7"/>
       <!-- Tier 2 -->
-      <rect x="12" y="268" width="126" height="100" fill="#08091f" stroke="#16204a" stroke-width="0.7"/>
+      <rect x="12" y="226" width="126" height="100" fill="#08091f" stroke="#16204a" stroke-width="0.7"/>
       <!-- Tier 1 base -->
-      <rect x="0"  y="388" width="150" height="112" fill="#07081c" stroke="#16204a" stroke-width="0.7"/>
+      <rect x="0"  y="326" width="150" height="174" fill="#07081c" stroke="#16204a" stroke-width="0.7"/>
       <!-- Neon tier edges -->
-      <rect x="44" y="156" width="62" height="2" fill="#ff2d95" opacity=".32">
+      <rect x="44" y="136" width="62" height="2" fill="#ff2d95" opacity=".32">
         <animate attributeName="opacity" values=".32;.1;.32" dur="6s" repeatCount="indefinite"/>
       </rect>
-      <rect x="28" y="266" width="94" height="2" fill="#b44aff" opacity=".28">
+      <rect x="28" y="224" width="94" height="2" fill="#b44aff" opacity=".28">
         <animate attributeName="opacity" values=".28;.08;.28" dur="7.5s" repeatCount="indefinite"/>
       </rect>
-      <rect x="12" y="366" width="126" height="2" fill="#00e5ff" opacity=".25">
+      <rect x="12" y="324" width="126" height="2" fill="#00e5ff" opacity=".25">
         <animate attributeName="opacity" values=".25;.07;.25" dur="5.5s" repeatCount="indefinite"/>
       </rect>
       <!-- Windows tier 4 -->
@@ -84,13 +84,13 @@
       </rect>
       <rect x="84" y="72"  width="5" height="7" fill="#ffb347" opacity=".16"/>
       <!-- Windows tier 3 -->
-      <rect x="36" y="172" width="5" height="7" fill="#00e5ff" opacity=".12"/>
-      <rect x="52" y="172" width="5" height="7" fill="#ffffff" opacity=".1"/>
-      <rect x="68" y="172" width="5" height="7" fill="#00e5ff" opacity=".15">
+      <rect x="36" y="152" width="5" height="7" fill="#00e5ff" opacity=".12"/>
+      <rect x="52" y="152" width="5" height="7" fill="#ffffff" opacity=".1"/>
+      <rect x="68" y="152" width="5" height="7" fill="#00e5ff" opacity=".15">
         <animate attributeName="opacity" values=".15;.04;.15" dur="5s" repeatCount="indefinite"/>
       </rect>
-      <rect x="84" y="172" width="5" height="7" fill="#ffb347" opacity=".1"/>
-      <rect x="100" y="172" width="5" height="7" fill="#ffffff" opacity=".09"/>
+      <rect x="84" y="152" width="5" height="7" fill="#ffb347" opacity=".1"/>
+      <rect x="100" y="152" width="5" height="7" fill="#ffffff" opacity=".09"/>
     </svg>
     <div class="hs-stars" id="hs-stars"></div>
     <div class="hs-glow-orbs" id="hs-glow-orbs"></div>
@@ -184,14 +184,103 @@
   </div>
 
   <!-- ── CONTACT MODAL ── -->
+  <style>
+    .cm-link {
+      display: flex; align-items: center; gap: .9rem;
+      padding: .75rem 1rem;
+      border: 1px solid #ffffff0a; border-radius: 4px;
+      text-decoration: none;
+      background: #ffffff04;
+      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+      cursor: pointer; position: relative; overflow: hidden;
+      font-family: inherit; width: 100%; text-align: left;
+    }
+    .cm-link::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      transition: opacity .2s;
+    }
+    .cm-link:hover { transform: translateX(4px); }
+    .cm-link[data-c="cyan"]    { border-color: #00e5ff18; }
+    .cm-link[data-c="cyan"]::before    { background: #00e5ff; opacity: .4; }
+    .cm-link[data-c="cyan"]:hover    { background: #00e5ff0d; border-color: #00e5ff44; box-shadow: 0 0 16px #00e5ff18; }
+    .cm-link[data-c="magenta"] { border-color: #ff2d9518; }
+    .cm-link[data-c="magenta"]::before { background: #ff2d95; opacity: .4; }
+    .cm-link[data-c="magenta"]:hover { background: #ff2d950d; border-color: #ff2d9544; box-shadow: 0 0 16px #ff2d9518; }
+    .cm-link[data-c="amber"]   { border-color: #ffb34718; }
+    .cm-link[data-c="amber"]::before   { background: #ffb347; opacity: .4; }
+    .cm-link[data-c="amber"]:hover   { background: #ffb3470d; border-color: #ffb34744; box-shadow: 0 0 16px #ffb34718; }
+    .cm-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .cm-link[data-c="cyan"]    .cm-icon { color: #00e5ff; }
+    .cm-link[data-c="magenta"] .cm-icon { color: #ff2d95; }
+    .cm-link[data-c="amber"]   .cm-icon { color: #ffb347; }
+    .cm-label {
+      font-family: 'Orbitron', monospace; font-size: .55rem;
+      letter-spacing: .18em; font-weight: 700;
+      min-width: 4.5rem;
+    }
+    .cm-link[data-c="cyan"]    .cm-label { color: #00e5ff; }
+    .cm-link[data-c="magenta"] .cm-label { color: #ff2d95; }
+    .cm-link[data-c="amber"]   .cm-label { color: #ffb347; }
+    .cm-value {
+      font-family: 'Rajdhani', sans-serif; font-size: .88rem; font-weight: 400;
+      color: #c8cee8; flex: 1; letter-spacing: .02em;
+    }
+    .cm-arrow-icon {
+      width: 16px; height: 16px; flex-shrink: 0;
+      color: #ffffff28; transition: color .2s, transform .2s;
+    }
+    .cm-link[data-c="magenta"]:hover .cm-arrow-icon { color: #ff2d9566; transform: translateX(3px); }
+    .cm-link[data-c="amber"]:hover   .cm-arrow-icon { color: #ffb34766; transform: translateX(3px); }
+    .cm-indicator {
+      width: 16px; height: 16px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #ffffff28; transition: color .2s;
+    }
+    .cm-indicator svg { width: 15px; height: 15px; display: block; }
+    .cm-indicator span { display: none; font-family: 'Orbitron', monospace; font-size: .5rem; letter-spacing: .12em; color: #00e5ff; white-space: nowrap; }
+    .cm-indicator.copied svg { display: none; }
+    .cm-indicator.copied span { display: block; }
+    .cm-link[data-c="cyan"]:hover .cm-indicator { color: #00e5ff66; }
+    #contact-close-btn:hover { background: #00e5ff0d !important; border-color: #00e5ff88 !important; }
+  </style>
   <div id="contact-modal"
-       style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;z-index:1000;">
+       style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:1000;">
     <div id="contact-modal-inner"
-         style="background:#0d1035;border:1px solid #ffffff12;border-radius:6px;padding:2rem;max-width:360px;width:90%;">
-      <h2 style="font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:.2em;color:#00e5ff;margin-bottom:1rem;">CONTACT</h2>
-      <p style="color:#8890bb;font-size:1rem;line-height:1.6;">Placeholder — contact form or links will go here.</p>
+         style="background:#0a0d2e;border:1px solid #ffffff14;border-top:1px solid #00e5ff33;border-radius:6px;padding:2rem;max-width:480px;width:92%;box-shadow:0 0 60px #00000088, 0 0 30px #00e5ff08;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.6rem;">
+        <div>
+          <h2 style="font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:.25em;color:#00e5ff;margin:0 0 .25rem;">CONTACT</h2>
+        </div>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.2" opacity=".35"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:.6rem;">
+        <button type="button" class="cm-link" data-c="cyan" id="cm-email-btn"
+                onclick="navigator.clipboard.writeText('alexandergimourginas@gmail.com').then(()=>{const ind=this.querySelector('.cm-indicator');ind.classList.add('copied');setTimeout(()=>ind.classList.remove('copied'),1800)})">
+          <svg class="cm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span class="cm-label">EMAIL</span>
+          <span class="cm-value">alexandergimourginas@gmail.com</span>
+          <span class="cm-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>COPIED</span>
+          </span>
+        </button>
+        <a href="https://www.linkedin.com/in/alexander-gimourginas/" target="_blank" rel="noopener noreferrer" class="cm-link" data-c="magenta">
+          <svg class="cm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <span class="cm-label">LINKEDIN</span>
+          <span class="cm-value">alexander-gimourginas</span>
+          <svg class="cm-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+        <a href="https://github.com/alexgimourginas" target="_blank" rel="noopener noreferrer" class="cm-link" data-c="amber">
+          <svg class="cm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span class="cm-label">GITHUB</span>
+          <span class="cm-value">alexgimourginas</span>
+          <svg class="cm-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+
       <button type="button" id="contact-close-btn"
-              style="margin-top:1.5rem;font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:.2em;color:#00e5ff;border:1px solid #00e5ff44;padding:.5rem 1.2rem;border-radius:2px;cursor:pointer;background:none;transition:border-color .2s;">
+              style="margin-top:1.4rem;width:100%;font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:.2em;color:#00e5ff;border:1px solid #00e5ff33;padding:.65rem;border-radius:3px;cursor:pointer;background:none;transition:background .2s,border-color .2s;">
         CLOSE
       </button>
     </div>

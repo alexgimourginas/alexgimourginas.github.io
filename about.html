@@ -305,7 +305,6 @@
       font-size: clamp(0.58rem,1vw,0.88rem);
       line-height:1.45; color:#1a1430;
     }
-    .ab-sec-body-i { color:#3a3050; font-style:italic; }
 
     .ab-tags { display:flex; flex-wrap:wrap; gap:5px; }
     .ab-tag {
@@ -505,7 +504,7 @@
                 </div>
                 <div>
                   <div class="ab-sec-label">CURRENTLY</div>
-                  <div class="ab-sec-body ab-sec-body-i">I've been spending a lot of time coding and writing a research paper that I'm aiming to publish at ICICS 2026. It's for a cybersecurity initiative at Seton Hall where we're building a full-scale deployable platform to strengthen digital safety and incident response across K-12 schools in New Jersey. The goal is to actually get this in front of schools and have it running in the real world. A big part of it is a machine learning model for detecting threats on endpoints, which has been keeping me busy.<br><br>I recently got my girlfriend into Marvel so we've been watching through all the movies. I've also been meaning to finish Red Dead Redemption 2, and I'm planning to replay Cyberpunk 2077 soon, one of my favorite games and the inspiration behind this site.</div>
+                  <div class="ab-sec-body">I've been spending a lot of time coding and writing a research paper that I'm aiming to publish at ICICS 2026. It's for a cybersecurity initiative at Seton Hall where we're building a full-scale deployable platform to strengthen digital safety and incident response across K-12 schools in New Jersey. The goal is to actually get this in front of schools and have it running in the real world. A big part of it is a machine learning model for detecting threats on endpoints, which has been keeping me busy.<br><br>I recently got my girlfriend into Marvel so we've been watching through all the movies. I've also been meaning to finish Red Dead Redemption 2, and I'm planning to replay Cyberpunk 2077 soon, one of my favorite games and the inspiration behind this site.</div>
                 </div>
               </div>
               <div class="ab-col-side">
@@ -972,8 +971,17 @@ const VW = window.innerWidth, VH = window.innerHeight;
   for (let i = 0; i < 8; i++)  wisps.push(mkWisp(ZONE_MID - H*0.06, ZONE_MID + H*0.08, 0.22, 0.05, 0.10, 0.22));
   // Ground fog (anchors buildings, low-lying)
   for (let i = 0; i < 6; i++)  wisps.push(mkWisp(ZONE_MID + H*0.04, ZONE_BOT, 0.20, 0.04, 0.07, 0.16));
-  // Foreground dark wisps — low-lying haze around top-down buildings
-  for (let i = 0; i < 10; i++) wisps.push(mkWisp(ZONE_BOT - H*0.14, ZONE_BOT + H*0.02, 0.18, 0.04, 0.22, 0.38, 14, 'rgba(28,38,68,1)'));
+
+  // Foreground streaks — persistent objects with own x drift
+  const fgStreaks = [
+    { x:W*0.05, y:H*0.625, sw:W*0.40, spd: 0.10, freq:0.011, amp:9,  alpha:0.50, col:'14,20,40' },
+    { x:W*0.30, y:H*0.650, sw:W*0.35, spd:-0.07, freq:0.009, amp:7,  alpha:0.45, col:'12,18,36' },
+    { x:W*0.55, y:H*0.675, sw:W*0.38, spd: 0.08, freq:0.013, amp:10, alpha:0.52, col:'16,22,44' },
+    { x:W*0.10, y:H*0.710, sw:W*0.42, spd:-0.09, freq:0.010, amp:8,  alpha:0.46, col:'13,19,38' },
+    { x:W*0.45, y:H*0.735, sw:W*0.36, spd: 0.06, freq:0.012, amp:9,  alpha:0.48, col:'15,21,42' },
+    { x:W*0.20, y:H*0.762, sw:W*0.44, spd:-0.08, freq:0.008, amp:7,  alpha:0.44, col:'12,18,38' },
+    { x:W*0.60, y:H*0.790, sw:W*0.38, spd: 0.07, freq:0.014, amp:10, alpha:0.50, col:'14,20,40' },
+  ];
 
   let t = 0;
   function draw() {
@@ -1060,6 +1068,30 @@ const VW = window.innerWidth, VH = window.innerHeight;
       ctx.fillStyle = `rgba(${col},${alpha})`;
       ctx.fill();
     });
+
+    // ── FOREGROUND BUILDING STREAKS ───────────────────────
+    for (const s of fgStreaks) {
+      ctx.save();
+      ctx.filter = 'blur(4px)';
+      const grad = ctx.createLinearGradient(s.x, 0, s.x + s.sw, 0);
+      grad.addColorStop(0,    `rgba(${s.col},0)`);
+      grad.addColorStop(0.12, `rgba(${s.col},${s.alpha})`);
+      grad.addColorStop(0.88, `rgba(${s.col},${s.alpha})`);
+      grad.addColorStop(1,    `rgba(${s.col},0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y + s.amp);
+      ctx.lineTo(s.x + s.sw, s.y + s.amp);
+      for (let i = s.sw; i >= 0; i -= 3) {
+        ctx.lineTo(s.x + i, s.y + Math.sin(i * s.freq + t * s.spd) * s.amp);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      s.x += s.spd;
+      if (s.x >  W * 1.1)    s.x = -s.sw;
+      if (s.x < -s.sw * 1.1) s.x =  W;
+    }
 
     requestAnimationFrame(draw);
   }

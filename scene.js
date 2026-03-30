@@ -56,18 +56,28 @@ for (let i = 0; i < 90; i++) {
 });
 
 // ── CITY SKYLINE ──
-function genSkyline(svg, count, minH, maxH, accentColor) {
-  if (!svg) return;
+let allBuildings = []; // screen-pixel rects for every building, used by initWindows
+
+function genSkyline(svg, count, minH, maxH, accentColor, opMult = 1) {
+  if (!svg) return [];
   const w = W();
   const svgH = svg.getBoundingClientRect().height || H() * 0.6;
+  const canvasH = H() * 0.58; // matches windowsCanvas height, anchored bottom:0
   svg.setAttribute('viewBox', `0 0 ${w} ${svgH}`);
   let h = '';
+  const buildings = [];
   const segW = w / count;
   for (let i = 0; i < count; i++) {
     const bw = segW * rand(0.5, 0.95);
     const bh = rand(minH, maxH) * svgH;
     const bx = i * segW + rand(0, segW - bw);
     const by = svgH - bh;
+    // Convert building top to windows-canvas Y coords.
+    // Both canvas and SVG are anchored at bottom:0, so building top in canvas = canvasH - bh_screen.
+    // bh_screen = bh (since SVG viewBox width==screen width and preserveAspectRatio=none, Y scales as svgH/canvasH...
+    // actually easier: building top screen Y = H()-svgH + by = H()-bh; canvas top screen Y = H()-canvasH;
+    // canvas Y of building top = (H()-bh) - (H()-canvasH) = canvasH - bh
+    buildings.push({ x: bx, y: canvasH - bh, w: bw, h: bh, opMult });
     const r = 8 + rand(0,15), g = 10 + rand(0,18), bl = 30 + rand(0,40);
     const fill = `rgb(${r},${g},${bl})`;
     h += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="${fill}"/>`;
@@ -89,12 +99,15 @@ function genSkyline(svg, count, minH, maxH, accentColor) {
     }
   }
   svg.innerHTML = h;
+  return buildings;
 }
 
 function buildCity() {
-  genSkyline(cityBack,  30, 0.3,  0.92, '#1a2266');
-  genSkyline(cityMid,   22, 0.25, 0.75, '#00e5ff');
-  genSkyline(cityFront, 15, 0.15, 0.55, '#ff2d95');
+  allBuildings = [
+    ...genSkyline(cityBack,  30, 0.3,  0.92, '#1a2266', 0.2),
+    ...genSkyline(cityMid,   22, 0.25, 0.75, '#00e5ff', 0.55),
+    ...genSkyline(cityFront, 15, 0.15, 0.55, '#ff2d95', 1.0),
+  ];
 }
 buildCity();
 
@@ -107,30 +120,32 @@ function initWindows() {
   winCtx = windowsCanvas.getContext('2d');
   windowsCanvas.width = W(); windowsCanvas.height = H() * 0.58;
   windowGrid = [];
-  const cols = Math.floor(W() / 10);
-  const rows = Math.floor(windowsCanvas.height / 11);
   const colors = ['#ffb347','#00e5ff','#ff2d95','#ffffff','#b44aff','#ffe4a0'];
-  const colHeights = [];
-  const buildingWidth = Math.floor(rand(3, 6));
-  let currentH = rand(0.3, 0.7);
-  for (let c = 0; c <= cols; c++) {
-    if (c % buildingWidth === 0) currentH = rand(0.15, 0.75);
-    colHeights[c] = currentH;
-  }
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (Math.random() > 0.4) {
-        const wx = c * 10 + rand(0, 4);
-        const wy = r * 11 + rand(0, 4);
-        const topFade = wy / windowsCanvas.height;
-        const roofLine = colHeights[c] * windowsCanvas.height * 0.45;
-        if (wy < roofLine && Math.random() > 0.15) continue;
-        const density = topFade * topFade * 0.55 + 0.4;
-        if (Math.random() > density) continue;
+  const canvasH = windowsCanvas.height;
+
+  for (const b of allBuildings) {
+    // Clip building rect to canvas bounds
+    const top    = Math.max(0, b.y);
+    const bottom = Math.min(canvasH, b.y + b.h);
+    const left   = Math.max(0, b.x);
+    const right  = Math.min(windowsCanvas.width, b.x + b.w);
+    if (bottom <= top || right <= left) continue;
+
+    const cellW = 9, cellH = 11;
+    const cols = Math.floor((right - left) / cellW);
+    const rows = Math.floor((bottom - top) / cellH);
+    if (cols < 1 || rows < 1) continue;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (Math.random() > 0.45) continue;
+        const wx = left + c * cellW + rand(1, 3);
+        const wy = top  + r * cellH + rand(1, 3);
+        const topFade = wy / canvasH;
         windowGrid.push({
-          x: wx, y: wy, w: rand(2,5), h: rand(2,6),
+          x: wx, y: wy, w: rand(2, 4), h: rand(2, 5),
           color: colors[Math.floor(rand(0, colors.length))],
-          baseOp: rand(0.03, 0.25) * Math.min(1, topFade + 0.3),
+          baseOp: rand(0.04, 0.22) * Math.min(1, topFade + 0.3) * b.opMult,
           speed: rand(0.5, 3), phase: rand(0, Math.PI * 2),
           on: Math.random() > 0.1,
         });
