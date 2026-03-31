@@ -100,13 +100,13 @@ const neonCols = ['#00e5ff','#ff2d95','#b44aff','#33ff88','#ffb347','#7b6fff','#
 const layers = [
   // FAR — short, narrow, dimmest
   { cls: 'pj-bg-far', count: 22, wMin: 1.2, wMax: 3, hMin: 20, hMax: 55,
-    rMin: 4, rMax: 8, gMin: 4, gMax: 8, bMin: 14, bMax: 22 },
+    rMin: 10, rMax: 20, gMin: 10, gMax: 18, bMin: 35, bMax: 58 },
   // MID — medium
   { cls: 'pj-bg-mid', count: 20, wMin: 1.8, wMax: 4, hMin: 35, hMax: 72,
-    rMin: 6, rMax: 12, gMin: 6, gMax: 12, bMin: 20, bMax: 32 },
+    rMin: 14, rMax: 26, gMin: 12, gMax: 22, bMin: 48, bMax: 78 },
   // NEAR — tallest, widest, most visible
   { cls: 'pj-bg-near', count: 16, wMin: 2.5, wMax: 5.5, hMin: 45, hMax: 88,
-    rMin: 8, rMax: 16, gMin: 8, gMax: 14, bMin: 24, bMax: 40 },
+    rMin: 20, rMax: 36, gMin: 16, gMax: 28, bMin: 62, bMax: 95 },
 ];
 
 layers.forEach(layer => {
@@ -127,7 +127,7 @@ layers.forEach(layer => {
       const ec = neonCols[Math.floor(rand(0, neonCols.length))];
       const side = Math.random() > 0.5 ? 'pj-bgb-edge-l' : 'pj-bgb-edge-r';
       edge.className = 'pj-bgb-edge ' + side;
-      edge.style.cssText = `--ec:${ec}; opacity: ${rand(0.06, 0.16)}`;
+      edge.style.cssText = `--ec:${ec}; opacity: ${rand(0.22, 0.50)}`;
       bldg.appendChild(edge);
     }
 
@@ -164,7 +164,7 @@ layers.forEach(layer => {
         const win = document.createElement('div');
         win.className = 'pj-bgb-win';
         const wc = neonCols[Math.floor(rand(0, neonCols.length))];
-        win.style.cssText = `left:${rand(10, 70)}%;top:${rand(8, 80)}%;opacity:${rand(0.06, 0.2)};--wc:${wc}`;
+        win.style.cssText = `left:${rand(10, 70)}%;top:${rand(8, 80)}%;opacity:${rand(0.22, 0.55)};--wc:${wc}`;
         bldg.appendChild(win);
       }
     }
