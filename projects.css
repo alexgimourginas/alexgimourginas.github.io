@@ -951,7 +951,7 @@
   flex-shrink: 0; width: 100%;
 }
 .pj-focal-spire {
-  width: 3px; height: 5vh; min-height: 24px;
+  width: 3px; height: 3vh; min-height: 16px;
   background: linear-gradient(to top, #10103a 50%, #1a1a50 80%, transparent);
   position: relative;
 }
@@ -963,12 +963,12 @@
 }
 .pj-focal-tier { position: relative; flex-shrink: 0; }
 .pj-focal-tier1 {
-  width: 22%; height: 2.5vh; min-height: 14px;
+  width: 22%; height: 1.8vh; min-height: 10px;
   background: #080a20;
   clip-path: polygon(15% 100%, 0% 0%, 100% 0%, 85% 100%);
 }
 .pj-focal-tier2 {
-  width: 45%; height: 3vh; min-height: 18px;
+  width: 45%; height: 2vh; min-height: 12px;
   background: #070920;
   clip-path: polygon(8% 100%, 0% 0%, 100% 0%, 92% 100%);
 }
@@ -978,7 +978,7 @@
   box-shadow: 0 0 18px #ff2d9566, 0 0 35px #b44aff33;
 }
 .pj-focal-tier3 {
-  width: 72%; height: 3.5vh; min-height: 22px;
+  width: 72%; height: 2.5vh; min-height: 16px;
   background: #06081e;
   clip-path: polygon(4% 100%, 0% 0%, 100% 0%, 96% 100%);
   overflow: visible;
@@ -1025,7 +1025,7 @@
 }
 
 .pj-focal-base {
-  width: 110%; height: 35vh;
+  width: 110%; height: 33vh;
   background: linear-gradient(to bottom, #050720 0%, #040614 15%, #030510 100%);
   border: 1px solid #ffffff05; border-bottom: none;
   position: relative; overflow: hidden;
@@ -1055,8 +1055,8 @@
   position: relative;
   background: linear-gradient(170deg, var(--cc-in) 0%, rgba(1,2,12,0.65) 40%, rgba(1,2,12,0.55) 100%);
   border: 1px solid var(--cc); border-radius: 2px;
-  padding: 0.75rem 0.8rem; overflow: visible; cursor: pointer;
-  display: flex; flex-direction: column; gap: 0.25rem;
+  padding: 0.9rem 1rem; overflow: visible; cursor: pointer;
+  display: flex; flex-direction: column; gap: 0.3rem;
   transition: box-shadow 0.4s, border-color 0.3s, transform 0.3s;
   text-decoration: none; color: inherit;
   /* Holographic glow — color bleeds onto building */
@@ -1127,22 +1127,26 @@
 }
 .pj-card-desc {
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(0.66rem,1.1vw,0.85rem);
-  color: #8892b8; line-height: 1.4;
+  font-size: clamp(0.7rem,1.15vw,0.9rem);
+  color: #c8d0e8; line-height: 1.4;
 }
-.pj-card-tags { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-top: 0.1rem; }
+.pj-card-footer {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 0.5rem; margin-top: 0.2rem;
+}
+.pj-card-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; flex: 1; }
 .pj-tag {
-  font-family: 'Orbitron', monospace; font-size: 0.42rem;
+  font-family: 'Orbitron', monospace; font-size: 0.6rem; font-weight: 700;
   letter-spacing: 0.08em; color: var(--cc);
-  border: 1px solid var(--cc-dim); padding: 0.08rem 0.26rem;
-  border-radius: 1px; opacity: 0.7;
-  text-shadow: 0 0 6px var(--cc-dim);
+  border: 1.5px solid var(--cc); padding: 0.12rem 0.38rem;
+  border-radius: 1px; opacity: 0.85;
+  text-shadow: 0 0 8px var(--cc);
 }
-.pj-card-btns { display: flex; gap: 0.3rem; margin-top: 0.2rem; }
+.pj-card-btns { display: flex; gap: 0.3rem; flex-shrink: 0; }
 .pj-btn {
-  font-family: 'Orbitron', monospace; font-size: 0.44rem;
+  font-family: 'Orbitron', monospace; font-size: 0.6rem; font-weight: 700;
   letter-spacing: 0.14em; color: var(--cc);
-  border: 1px solid var(--cc-dim); padding: 0.2rem 0.42rem;
+  border: 1.5px solid var(--cc); padding: 0.22rem 0.5rem;
   border-radius: 1px; background: none; cursor: pointer;
   text-decoration: none; display: inline-flex; align-items: center;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -1200,6 +1204,17 @@
   text-shadow: 0 0 8px rgba(0,220,255,0.4); transition: color 0.3s, text-shadow 0.3s;
 }
 .pj-back:hover { color: #fff; text-shadow: 0 0 10px rgba(0,220,255,0.8); }
+
+/* ── SHORT SCREENS (e.g. 1280×800) — compress content to fit ── */
+@media (max-height: 820px) {
+  .pj-projects { gap: 0.55rem; }
+  .pj-card { padding: 0.7rem 0.8rem; gap: 0.22rem; }
+  .pj-card-desc { font-size: clamp(0.66rem, 1.1vw, 0.84rem); line-height: 1.35; }
+  .pj-tag { font-size: 0.54rem; padding: 0.08rem 0.28rem; }
+  .pj-btn { font-size: 0.54rem; padding: 0.19rem 0.44rem; }
+  .pj-card-title { font-size: clamp(0.74rem, 1.55vw, 1rem); }
+  .pj-focal-body { padding: 0.6rem 0.75rem; gap: 0.45rem; }
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {

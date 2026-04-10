@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Neon District</title>
+  <title>Alex Gimourginas</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -406,6 +406,24 @@
       font-family:'Share Tech Mono',monospace; font-size:.45rem; letter-spacing:.1em;
       color:rgba(80,140,255,0.2); pointer-events:none;
     }
+
+    /* ── SHORT SCREENS (e.g. 1280×800) ─────────────────── */
+    @media (max-height: 820px) {
+      #laptop-unit  { width: clamp(300px, 44vw, 700px); }
+      #desk-surface { width: clamp(360px, 57vw, 860px); }
+      #desk-pedestal{ width: clamp(260px, 44vw, 680px); }
+      .ab-body      { padding: clamp(5px,0.8vw,10px) clamp(7px,1vw,14px); gap: clamp(3px,0.5vw,7px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #7030aa33 transparent; }
+      .ab-body::-webkit-scrollbar { width: 3px; }
+      .ab-body::-webkit-scrollbar-track { background: transparent; }
+      .ab-body::-webkit-scrollbar-thumb { background: #7030aa66; border-radius: 2px; }
+      #scr-about::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 28px; background: linear-gradient(to bottom, transparent, rgba(248,245,236,0.92)); pointer-events: none; z-index: 5; }
+      .ab-name      { font-size: clamp(0.85rem, 1.7vw, 1.2rem); }
+      .ab-role      { font-size: clamp(0.52rem, 0.82vw, 0.72rem); }
+      .ab-sec-body  { font-size: clamp(0.52rem, 0.88vw, 0.78rem); line-height: 1.35; }
+      .ab-tag       { font-size: clamp(0.44rem, 0.62vw, 0.58rem); padding: 2px 6px; }
+      .ab-col-main  { gap: clamp(3px,0.5vw,7px); }
+      .ab-sec-label { margin-bottom: 1px; }
+    }
   </style>
 </head>
 <body>
@@ -474,7 +492,7 @@
           <div class="ab-body">
             <div>
               <div class="ab-name">Alex Gimourginas</div>
-              <div class="ab-role">Developer &nbsp;·&nbsp; Designer &nbsp;·&nbsp; Creator</div>
+              <div class="ab-role">Developer &nbsp;·&nbsp; Researcher &nbsp;·&nbsp; Strategist</div>
             </div>
             <div class="ab-divider"></div>
             <div class="ab-cols">

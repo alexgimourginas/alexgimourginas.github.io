@@ -63,7 +63,7 @@
 .hs-building-signs { position: absolute; bottom: 0; left: 0; right: 0; height: 55vh; z-index: 6; pointer-events: none; }
 .hs-bsign {
   position: absolute;
-  border: 1px solid;
+  border: 1.5px solid;
   border-radius: 2px;
   padding: 3px 10px;
   font-family: 'Noto Sans SC', sans-serif;
@@ -74,10 +74,10 @@
   white-space: nowrap;
 }
 @keyframes hs-signFlicker {
-  0%, 92%, 96%, 100% { opacity: .9; }
-  93% { opacity: .5; }
-  95% { opacity: .8; }
-  97% { opacity: .6; }
+  0%, 92%, 96%, 100% { opacity: .22; }
+  93% { opacity: .12; }
+  95% { opacity: .18; }
+  97% { opacity: .14; }
 }
 
 /* STREET */
@@ -260,6 +260,12 @@
 }
 
 @media (max-width: 600px) {
-  .hs-nav-signs { flex-direction: column; align-items: center; gap: .8rem; }
-  .nav-sign { width: 70%; justify-content: center; }
+  .hs-neon-text,
+  .hs-hero-title   { font-size: clamp(1.25rem, 7.5vw, 1.9rem); }
+  .hs-neon-title-wrap { white-space: nowrap; }
+
+  .hs-nav-signs { flex-direction: column; align-items: center; gap: 1rem; }
+  .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; }
+  .nav-label    { font-size: 1rem; letter-spacing: .2em; }
+  .nav-icon     { width: 24px; height: 24px; }
 }

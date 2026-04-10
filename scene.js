@@ -186,7 +186,7 @@ function drawWindows(t) {
   const d = document.createElement('div');
   d.className = 'hs-bsign';
   d.textContent = s.t;
-  d.style.cssText = `left:${s.x};bottom:${s.y};color:${s.c};border-color:${s.c}0d;opacity:.1;text-shadow:0 0 5px ${s.c}33;filter:blur(0.5px);animation-delay:${-i*1.3}s;${s.f ? `font-family:'Orbitron',monospace;font-weight:700;font-size:.7rem;letter-spacing:.15em` : ''}`;
+  d.style.cssText = `left:${s.x};bottom:${s.y};color:${s.c};border-color:${s.c}99;opacity:.1;text-shadow:0 0 4px ${s.c}22;filter:blur(0.5px);animation-delay:${-i*1.3}s;${s.f ? `font-family:'Orbitron',monospace;font-weight:700;font-size:.7rem;letter-spacing:.15em` : ''}`;
   buildingSignsEl.appendChild(d);
 });
 
