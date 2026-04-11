@@ -525,8 +525,8 @@ if (isMobileDevice && mobileCanvas) {
   // Full-width skyline — varied heights, no zone distinction
   for (let i = 0; i < 28; i++) {
     const bw = rand(18, 46);
-    // taller range spread evenly so center doesn't feel empty
-    const bh = rand(VH * 0.20, VH * 0.72);
+    // moderate heights — buildings sit in lower half of screen
+    const bh = rand(VH * 0.15, VH * 0.48);
     mBldg(rand(i * (VW/28), (i+1) * (VW/28) - bw), VH - bh, bw, bh,
       `rgb(${8+rand(0,12)|0},${10+rand(0,12)|0},${30+rand(0,22)|0})`);
   }
@@ -540,12 +540,12 @@ if (isMobileDevice && mobileCanvas) {
   function drawMobileScene(t) {
     mc.clearRect(0, 0, VW, VH);
 
-    // Sky gradient
+    // Sky gradient — navy matching desktop
     const sky = mc.createLinearGradient(0, 0, 0, VH);
-    sky.addColorStop(0,    '#04020f');
-    sky.addColorStop(0.45, '#080520');
-    sky.addColorStop(0.75, '#0d0830');
-    sky.addColorStop(1,    '#060418');
+    sky.addColorStop(0,    '#08081f');
+    sky.addColorStop(0.35, '#0a0d2e');
+    sky.addColorStop(0.65, '#0f1545');
+    sky.addColorStop(1,    '#111a52');
     mc.fillStyle = sky;
     mc.fillRect(0, 0, VW, VH);
 

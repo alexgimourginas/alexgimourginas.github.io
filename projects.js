@@ -323,14 +323,16 @@ const valleyL = document.querySelector('.pj-valley-left');
 const valleyR = document.querySelector('.pj-valley-right');
 const focal   = document.querySelector('.pj-focal');
 
-document.addEventListener('mousemove', e => {
-  const mx = (e.clientX / W() - 0.5) * 2;
-  const my = (e.clientY / H() - 0.5) * 2;
-  if (valleyL) valleyL.style.transform = `translateX(${mx * -3}px) translateY(${my * -1.5}px)`;
-  if (valleyR) valleyR.style.transform = `translateX(${mx * 3}px) translateY(${my * -1.5}px)`;
-  if (focal)   focal.style.transform   = `translateX(calc(-50% + ${mx * -1.5}px)) translateY(${my * -1}px)`;
-  if (bgCity)  bgCity.style.transform   = `translateX(${mx * -1}px)`;
-});
+if (window.innerWidth > 600) {
+  document.addEventListener('mousemove', e => {
+    const mx = (e.clientX / W() - 0.5) * 2;
+    const my = (e.clientY / H() - 0.5) * 2;
+    if (valleyL) valleyL.style.transform = `translateX(${mx * -3}px) translateY(${my * -1.5}px)`;
+    if (valleyR) valleyR.style.transform = `translateX(${mx * 3}px) translateY(${my * -1.5}px)`;
+    if (focal)   focal.style.transform   = `translateX(calc(-50% + ${mx * -1.5}px)) translateY(${my * -1}px)`;
+    if (bgCity)  bgCity.style.transform   = `translateX(${mx * -1}px)`;
+  });
+}
 
 // ── AIRCRAFT EASTER EGG — hover to slow, click to shoot down ──────────────
 document.querySelectorAll('.pj-aircraft').forEach(ac => {
