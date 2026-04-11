@@ -350,7 +350,8 @@ function drawTram(t) {
   cx.beginPath(); cx.moveTo(0,y-20); cx.lineTo(W(),y-20); cx.stroke();
   cx.globalAlpha = 0.5 + Math.sin(t*3)*0.2; cx.fillStyle = '#00e5ff';
   cx.fillRect(x+2, y+32, 116, 2);
-  cx.shadowColor = '#00e5ff'; cx.shadowBlur = 8; cx.fillRect(x+2, y+32, 116, 2); cx.shadowBlur = 0;
+  if (!isMobileDevice) { cx.shadowColor = '#00e5ff'; cx.shadowBlur = 8; }
+  cx.fillRect(x+2, y+32, 116, 2); cx.shadowBlur = 0;
   cx.restore();
   tram.x += tram.speed;
   if (tram.x > W()+100) tram.x = -250;
@@ -373,7 +374,7 @@ function drawFlyingCars(t) {
     cx.globalAlpha = 0.7; cx.fillStyle = '#0c1240';
     cx.beginPath(); cx.ellipse(car.x, cy, car.size, car.size*0.4, 0, 0, Math.PI*2); cx.fill();
     cx.globalAlpha = 0.4; cx.fillStyle = car.color;
-    cx.shadowColor = car.color; cx.shadowBlur = 12;
+    if (!isMobileDevice) { cx.shadowColor = car.color; cx.shadowBlur = 12; }
     cx.beginPath(); cx.ellipse(car.x, cy+car.size*0.3, car.size*0.7, 2, 0, 0, Math.PI*2); cx.fill();
     cx.shadowBlur = 0;
     const dir = car.speed > 0 ? 1 : -1;
@@ -433,19 +434,21 @@ if (navSignsEl) {
     setTimeout(() => s.classList.add('visible'), 1200 + i * 150);
   });
 
-  // Random scarce glitch on nav buttons
-  function scheduleGlitch() {
-    const delay = 3000 + Math.random() * 8000; // 3-11s between glitches
-    setTimeout(() => {
-      const btn = navBtns[Math.floor(Math.random() * navBtns.length)];
-      if (btn.classList.contains('visible')) {
-        btn.classList.add('hs-glitch');
-        btn.addEventListener('animationend', () => btn.classList.remove('hs-glitch'), { once: true });
-      }
-      scheduleGlitch();
-    }, delay);
+  // Random scarce glitch on nav buttons (desktop only)
+  if (!isMobileDevice) {
+    function scheduleGlitch() {
+      const delay = 3000 + Math.random() * 8000;
+      setTimeout(() => {
+        const btn = navBtns[Math.floor(Math.random() * navBtns.length)];
+        if (btn.classList.contains('visible')) {
+          btn.classList.add('hs-glitch');
+          btn.addEventListener('animationend', () => btn.classList.remove('hs-glitch'), { once: true });
+        }
+        scheduleGlitch();
+      }, delay);
+    }
+    setTimeout(scheduleGlitch, 4000);
   }
-  setTimeout(scheduleGlitch, 4000);
 }
 
 // ── FOG ──

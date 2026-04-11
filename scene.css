@@ -287,7 +287,7 @@
   .hs-hero { margin-top: -8vh; }
 
   .hs-nav-signs { flex-direction: column; align-items: center; gap: 1rem; }
-  .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; }
+  .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; backdrop-filter: none; background: #0a0e27cc; }
   .nav-label    { font-size: 1rem; letter-spacing: .2em; }
   .nav-icon     { width: 24px; height: 24px; }
 }
