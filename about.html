@@ -407,6 +407,26 @@
       color:rgba(80,140,255,0.2); pointer-events:none;
     }
 
+    /* ── MOBILE ─────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      #laptop-unit  { width: 92vw; bottom: 4vh; }
+      #desk-surface { width: 100vw; }
+      #desk-pedestal{ width: 86vw; }
+      #screen-lid   { border-radius: 4px 4px 0 0; }
+      .ab-body      { overflow-y: auto; scrollbar-width: none; padding: 8px 10px; gap: 7px; }
+      .ab-body::-webkit-scrollbar { display: none; }
+      .ab-col-side  { width: 70px; }
+      .ab-photo     { width: 70px; height: 84px; }
+      .ab-name      { font-size: clamp(0.9rem, 5vw, 1.2rem); }
+      .ab-sec-body  { font-size: 0.7rem; line-height: 1.4; }
+      .ab-tag       { font-size: 0.5rem; padding: 2px 6px; }
+      #scr-about::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 24px;
+        background: linear-gradient(to bottom, transparent, rgba(248,245,236,0.95));
+        pointer-events: none; z-index: 5;
+      }
+    }
+
     /* ── SHORT SCREENS (e.g. 1280×800) ─────────────────── */
     @media (max-height: 820px) {
       #laptop-unit  { width: clamp(300px, 44vw, 700px); }
@@ -820,14 +840,16 @@ const VW = window.innerWidth, VH = window.innerHeight;
   ctx.fillStyle = fogGrad;
   ctx.fillRect(0, fogTop, VW, fogH);
 
-  // Secondary fog — wider radius, lower peak so it doesn't stripe
-  const fog2Grad = ctx.createRadialGradient(VW*0.5, fogTop + fogH*0.52, 0, VW*0.5, fogTop + fogH*0.52, VW*0.62);
-  fog2Grad.addColorStop(0,   'rgba(68,88,148,0.18)');
-  fog2Grad.addColorStop(0.40,'rgba(52,72,128,0.10)');
-  fog2Grad.addColorStop(0.70,'rgba(36,55,105,0.05)');
-  fog2Grad.addColorStop(1,   'rgba(0,0,0,0)');
-  ctx.fillStyle = fog2Grad;
-  ctx.fillRect(0, fogTop, VW, fogH);
+  // Secondary fog — wider radius, lower peak so it doesn't stripe (skip on mobile — creates oval blobs)
+  if (VW > 600) {
+    const fog2Grad = ctx.createRadialGradient(VW*0.5, fogTop + fogH*0.52, 0, VW*0.5, fogTop + fogH*0.52, VW*0.62);
+    fog2Grad.addColorStop(0,   'rgba(68,88,148,0.18)');
+    fog2Grad.addColorStop(0.40,'rgba(52,72,128,0.10)');
+    fog2Grad.addColorStop(0.70,'rgba(36,55,105,0.05)');
+    fog2Grad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = fog2Grad;
+    ctx.fillRect(0, fogTop, VW, fogH);
+  }
 
   // Ground fog — sits at the base of top-down buildings to anchor them, not float
   const fog3Grad = ctx.createLinearGradient(0, VH*0.60, 0, VH*0.83);
@@ -840,20 +862,22 @@ const VW = window.innerWidth, VH = window.innerHeight;
   ctx.fillRect(0, VH*0.60, VW, VH*0.23);
   ctx.restore();
 
-  // ── 4. CITY GLOW ON HORIZON ──────────────────────────────
-  ctx.save();
-  const glowGrad = ctx.createRadialGradient(VW*0.38, VH*0.52, 0, VW*0.38, VH*0.52, VW*0.55);
-  glowGrad.addColorStop(0, 'rgba(100,70,220,0.07)');
-  glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = glowGrad;
-  ctx.fillRect(0, VH*0.25, VW, VH*0.4);
+  // ── 4. CITY GLOW ON HORIZON (skip on mobile — radials create visible ovals) ──
+  if (VW > 600) {
+    ctx.save();
+    const glowGrad = ctx.createRadialGradient(VW*0.38, VH*0.52, 0, VW*0.38, VH*0.52, VW*0.55);
+    glowGrad.addColorStop(0, 'rgba(100,70,220,0.07)');
+    glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(0, VH*0.25, VW, VH*0.4);
 
-  const glowGrad2 = ctx.createRadialGradient(VW*0.66, VH*0.55, 0, VW*0.66, VH*0.55, VW*0.4);
-  glowGrad2.addColorStop(0, 'rgba(0,150,255,0.06)');
-  glowGrad2.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = glowGrad2;
-  ctx.fillRect(0, VH*0.3, VW, VH*0.35);
-  ctx.restore();
+    const glowGrad2 = ctx.createRadialGradient(VW*0.66, VH*0.55, 0, VW*0.66, VH*0.55, VW*0.4);
+    glowGrad2.addColorStop(0, 'rgba(0,150,255,0.06)');
+    glowGrad2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glowGrad2;
+    ctx.fillRect(0, VH*0.3, VW, VH*0.35);
+    ctx.restore();
+  }
 
   // ── 5. NARROW SIDE BUILDINGS (flanking, at our level) ────
   // Partial building faces on the edges — we see just the sides/tops of nearby buildings.
