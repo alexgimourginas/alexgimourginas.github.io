@@ -216,7 +216,7 @@ function initRain() {
   rainCanvas.width = W(); rainCanvas.height = H();
   rainDrops = [];
   const isMobile = W() <= 600;
-  const count = isMobile ? Math.min(Math.floor(W() / 18), 50) : Math.min(Math.floor(W() / 6), 250);
+  const count = isMobile ? 0 : Math.min(Math.floor(W() / 6), 250);
   for (let i = 0; i < count; i++)
     rainDrops.push({ x:rand(0,W()), y:rand(-H(),H()), len:rand(10,25), speed:rand(8,16), op:rand(0.06,0.18), w:rand(0.3,0.7) });
 }
