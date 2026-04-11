@@ -264,6 +264,13 @@
   .hs-hero-title   { font-size: clamp(1.25rem, 7.5vw, 1.9rem); }
   .hs-neon-title-wrap { white-space: nowrap; }
 
+  .hs-hero-sub { letter-spacing: .15em; white-space: nowrap; }
+
+  .hs-neon-hr  { display: none; }
+
+  /* hide the neon nav signs entirely on mobile */
+  #hs-nav-signs { display: none; }
+
   .hs-nav-signs { flex-direction: column; align-items: center; gap: 1rem; }
   .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; }
   .nav-label    { font-size: 1rem; letter-spacing: .2em; }
