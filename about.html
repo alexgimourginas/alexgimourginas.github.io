@@ -409,18 +409,19 @@
 
     /* ── MOBILE ─────────────────────────────────────────── */
     @media (max-width: 600px) {
-      #laptop-unit  { width: 92vw; bottom: 4vh; }
+      #laptop-unit  { width: 96vw; bottom: 4vh; }
       #desk-surface { width: 100vw; }
-      #desk-pedestal{ width: 86vw; }
+      #desk-pedestal{ width: 90vw; }
       #screen-lid   { border-radius: 4px 4px 0 0; }
       .ab-body      { overflow-y: auto; scrollbar-width: none; padding: 8px 10px; gap: 7px; }
       .ab-body::-webkit-scrollbar { display: none; }
       .ab-col-side  { width: 70px; }
       .ab-photo     { width: 70px; height: 84px; }
-      .ab-photo img { object-position: center 60%; transform-origin: center 60%; }
-      .ab-name      { font-size: clamp(0.9rem, 5vw, 1.2rem); }
-      .ab-sec-body  { font-size: 0.7rem; line-height: 1.4; }
-      .ab-tag       { font-size: 0.5rem; padding: 2px 6px; }
+      .ab-photo img { object-position: center 50%; transform-origin: center 50%; }
+      .ab-name      { font-size: clamp(0.97rem, 5.3vw, 1.3rem); }
+      .ab-sec-label { font-size: clamp(0.42rem, 0.68vw, 0.58rem); }
+      .ab-sec-body  { font-size: 0.76rem; line-height: 1.4; }
+      .ab-tag       { font-size: 0.54rem; padding: 2px 6px; }
       #scr-about::after {
         content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 24px;
         background: linear-gradient(to bottom, transparent, rgba(248,245,236,0.95));

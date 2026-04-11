@@ -293,7 +293,11 @@
   .hs-hero { margin-top: -4vh; }
 
   .hs-nav-signs { flex-direction: column; align-items: center; gap: 1rem; }
-  .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; backdrop-filter: none; background: #0a0e27cc; }
+  .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; backdrop-filter: none; background: #0a0e27cc; border-width: 1.5px; }
+  .nav-sign[data-c="cyan"]    { box-shadow: 0 0 12px #00e5ff44, inset 0 0 8px #00e5ff11; border-color: #00e5ff; }
+  .nav-sign[data-c="magenta"] { box-shadow: 0 0 12px #ff2d9544, inset 0 0 8px #ff2d9511; border-color: #ff2d95; }
+  .nav-sign[data-c="amber"]   { box-shadow: 0 0 12px #ffb34744, inset 0 0 8px #ffb34711; border-color: #ffb347; }
+  .nav-sign[data-c="purple"]  { box-shadow: 0 0 12px #b44aff44, inset 0 0 8px #b44aff11; border-color: #b44aff; }
   .nav-label    { font-size: 1rem; letter-spacing: .2em; }
   .nav-icon     { width: 24px; height: 24px; }
 }
