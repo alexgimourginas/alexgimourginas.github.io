@@ -259,19 +259,13 @@
   100% { clip-path: inset(0); transform: translateY(0); filter: none; }
 }
 
+#hs-mobile-canvas {
+  display: none;
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2;
+}
+
 @media (max-width: 600px) {
-  .hs-neon-text,
-  .hs-hero-title   { font-size: clamp(1.25rem, 7.5vw, 1.9rem); }
-  .hs-neon-title-wrap { white-space: nowrap; }
-
-  .hs-hero-sub { letter-spacing: .15em; white-space: nowrap; }
-
-  .hs-neon-hr  { display: none; }
-
-  /* hide city building signs on mobile */
-  #hs-building-signs { display: none; }
-
-  /* shift entire city scene down — all layers together */
+  /* hide all desktop scene layers */
   .hs-city-layer,
   .hs-windows-canvas,
   .hs-objects-canvas,
@@ -281,10 +275,22 @@
   .hs-street-reflection,
   .hs-wires-layer,
   .hs-rain-canvas,
-  #hs-building-signs { transform: translateY(24vh); }
+  .hs-flow-canvas,
+  .hs-glow-orbs,
+  #hs-building-signs { display: none !important; transform: none !important; }
 
-  /* move hero content up */
-  .hs-hero { margin-top: -8vh; }
+  #hs-mobile-canvas { display: block; }
+
+  .hs-neon-text,
+  .hs-hero-title   { font-size: clamp(1.25rem, 7.5vw, 1.9rem); }
+  .hs-neon-title-wrap { white-space: nowrap; }
+
+  .hs-hero-sub { letter-spacing: .15em; white-space: nowrap; }
+
+  .hs-neon-hr  { display: none; }
+
+  /* move hero content up slightly */
+  .hs-hero { margin-top: -4vh; }
 
   .hs-nav-signs { flex-direction: column; align-items: center; gap: 1rem; }
   .nav-sign     { width: 82%; justify-content: center; padding: 1.1rem 1.8rem; backdrop-filter: none; background: #0a0e27cc; }

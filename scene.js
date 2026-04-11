@@ -494,7 +494,151 @@ function drawFog(t) {
   }
 }
 
-// ── MAIN LOOP ──
+// ── MOBILE SCENE ──────────────────────────────────────────────────────────────
+const mobileCanvas = document.getElementById('hs-mobile-canvas');
+
+if (isMobileDevice && mobileCanvas) {
+  const mc = mobileCanvas.getContext('2d');
+  mobileCanvas.width  = W();
+  mobileCanvas.height = H();
+
+  const VW = W(), VH = H();
+  const neonCols = ['#00e5ff','#ff2d95','#b44aff','#33ff88','#ffb347'];
+
+  // Build static buildings — two flanking columns + distant skyline
+  const mBuildings = [];
+
+  function mBldg(x, y, w, h, col) {
+    mBuildings.push({ x, y, w, h, col,
+      windows: Array.from({ length: Math.floor(w/10) * Math.floor(h/14) }, () => ({
+        cx: x + rand(4, w - 4),
+        cy: y + rand(4, h - 4),
+        color: neonCols[Math.floor(rand(0, neonCols.length))],
+        phase: rand(0, Math.PI * 2),
+        speed: rand(0.3, 1.8),
+        on: Math.random() > 0.45,
+      }))
+    });
+  }
+
+  // Far skyline — thin short buildings across full width
+  for (let i = 0; i < 18; i++) {
+    const bw = rand(14, 32);
+    const bh = rand(VH * 0.12, VH * 0.32);
+    mBldg(rand(0, VW - bw), VH - bh, bw, bh, `rgb(${8+rand(0,8)|0},${10+rand(0,10)|0},${28+rand(0,18)|0})`);
+  }
+  // Left column — tall narrow towers
+  for (let i = 0; i < 5; i++) {
+    const bw = rand(28, 52);
+    const bh = rand(VH * 0.45, VH * 0.80);
+    mBldg(rand(0, VW * 0.22 - bw), VH - bh, bw, bh, `rgb(${10+rand(0,10)|0},${12+rand(0,12)|0},${35+rand(0,20)|0})`);
+  }
+  // Right column
+  for (let i = 0; i < 5; i++) {
+    const bw = rand(28, 52);
+    const bh = rand(VH * 0.45, VH * 0.80);
+    mBldg(VW * 0.78 + rand(0, VW * 0.22 - bw), VH - bh, bw, bh, `rgb(${10+rand(0,10)|0},${12+rand(0,12)|0},${35+rand(0,20)|0})`);
+  }
+
+  // Stars
+  const mStars = Array.from({ length: 80 }, () => ({
+    x: rand(0, VW), y: rand(0, VH * 0.6),
+    r: rand(0.4, 1.4), phase: rand(0, Math.PI * 2), speed: rand(0.3, 1.2),
+  }));
+
+  function drawMobileScene(t) {
+    mc.clearRect(0, 0, VW, VH);
+
+    // Sky gradient
+    const sky = mc.createLinearGradient(0, 0, 0, VH);
+    sky.addColorStop(0,    '#04020f');
+    sky.addColorStop(0.45, '#080520');
+    sky.addColorStop(0.75, '#0d0830');
+    sky.addColorStop(1,    '#060418');
+    mc.fillStyle = sky;
+    mc.fillRect(0, 0, VW, VH);
+
+    // Stars
+    for (const s of mStars) {
+      const a = 0.4 + Math.sin(t * s.speed + s.phase) * 0.3;
+      mc.globalAlpha = a;
+      mc.fillStyle = '#ffffff';
+      mc.beginPath(); mc.arc(s.x, s.y, s.r, 0, Math.PI * 2); mc.fill();
+    }
+    mc.globalAlpha = 1;
+
+    // Horizon neon glow
+    const hY = VH * 0.72;
+    const hg = mc.createLinearGradient(0, hY - 40, 0, hY + 60);
+    hg.addColorStop(0, 'rgba(0,0,0,0)');
+    hg.addColorStop(0.4, 'rgba(0,180,255,0.06)');
+    hg.addColorStop(0.6, 'rgba(180,74,255,0.08)');
+    hg.addColorStop(1, 'rgba(0,0,0,0)');
+    mc.fillStyle = hg;
+    mc.fillRect(0, hY - 40, VW, 100);
+
+    // Buildings (static fill)
+    for (const b of mBuildings) {
+      mc.fillStyle = b.col;
+      mc.fillRect(b.x, b.y, b.w, b.h);
+      // Edge accent lines
+      mc.fillStyle = '#00e5ff';
+      mc.globalAlpha = 0.06;
+      mc.fillRect(b.x, b.y, 1, b.h);
+      mc.fillRect(b.x + b.w - 1, b.y, 1, b.h);
+      mc.globalAlpha = 1;
+    }
+
+    // Neon horizon line
+    mc.strokeStyle = '#00e5ff';
+    mc.globalAlpha = 0.12 + Math.sin(t * 0.5) * 0.04;
+    mc.lineWidth = 1;
+    mc.beginPath(); mc.moveTo(0, hY); mc.lineTo(VW, hY); mc.stroke();
+    mc.globalAlpha = 1;
+
+    // Animated windows
+    for (const b of mBuildings) {
+      for (const w of b.windows) {
+        if (!w.on) continue;
+        const a = 0.08 + Math.sin(t * w.speed + w.phase) * 0.06;
+        mc.globalAlpha = Math.max(0, a);
+        mc.fillStyle = w.color;
+        mc.fillRect(w.cx, w.cy, 3, 3);
+      }
+    }
+    mc.globalAlpha = 1;
+
+    // Street / ground strip
+    const sg = mc.createLinearGradient(0, VH * 0.9, 0, VH);
+    sg.addColorStop(0, '#0a0f28');
+    sg.addColorStop(1, '#060418');
+    mc.fillStyle = sg;
+    mc.fillRect(0, VH * 0.9, VW, VH * 0.1);
+
+    // Neon puddle reflections at bottom
+    for (let i = 0; i < 3; i++) {
+      const px = VW * (0.2 + i * 0.28);
+      const pc = neonCols[i % neonCols.length];
+      const pa = 0.04 + Math.sin(t * 1.2 + i) * 0.02;
+      mc.globalAlpha = pa;
+      mc.fillStyle = pc;
+      mc.beginPath(); mc.ellipse(px, VH * 0.95, 40, 5, 0, 0, Math.PI * 2); mc.fill();
+    }
+    mc.globalAlpha = 1;
+  }
+
+  // Mobile loop — 30fps
+  let mLastFrame = 0;
+  function mobileLoop(ts) {
+    requestAnimationFrame(mobileLoop);
+    if (ts - mLastFrame < 33) return;
+    mLastFrame = ts;
+    drawMobileScene(ts * 0.001);
+  }
+  requestAnimationFrame(mobileLoop);
+}
+
+// ── MAIN LOOP (desktop only) ──────────────────────────────────────────────────
 const targetFPS = isMobileDevice ? 30 : 60;
 const frameInterval = 1000 / targetFPS;
 let lastFrameTime = 0;
@@ -504,6 +648,7 @@ function loop(ts) {
   if (ts - lastFrameTime < frameInterval) return;
   lastFrameTime = ts;
   const t = ts * 0.001;
+  if (isMobileDevice) return; // mobile uses its own canvas
   drawRain();
   drawWindows(t);
   drawNeonFlow(t);
