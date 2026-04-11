@@ -271,8 +271,17 @@
   /* hide city building signs on mobile */
   #hs-building-signs { display: none; }
 
-  /* shift entire city scene down */
-  .hs-city-layer { transform: translateY(24vh); }
+  /* shift entire city scene down — all layers together */
+  .hs-city-layer,
+  .hs-windows-canvas,
+  .hs-objects-canvas,
+  .hs-reflection-canvas,
+  .hs-fog-canvas,
+  .hs-street,
+  .hs-street-reflection,
+  .hs-wires-layer,
+  .hs-rain-canvas,
+  #hs-building-signs { transform: translateY(24vh); }
 
   /* move hero content up */
   .hs-hero { margin-top: -8vh; }
