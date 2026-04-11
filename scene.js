@@ -427,7 +427,12 @@ function positionNeonSVG() {
     t.setAttribute('y', cy);
   });
 }
-setTimeout(positionNeonSVG, 700);
+// Fire after fonts are loaded and one layout frame has passed
+document.fonts.ready.then(() => requestAnimationFrame(positionNeonSVG));
+// Fallback for browsers where fonts.ready resolves before layout updates
+setTimeout(positionNeonSVG, 900);
+// Re-align on resize / orientation change
+window.addEventListener('resize', positionNeonSVG);
 
 // ── NAV ENTRANCE ANIMATION ──
 if (navSignsEl) {
