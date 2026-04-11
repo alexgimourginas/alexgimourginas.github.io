@@ -417,6 +417,7 @@
       .ab-body::-webkit-scrollbar { display: none; }
       .ab-col-side  { width: 70px; }
       .ab-photo     { width: 70px; height: 84px; }
+      .ab-photo img { object-position: center 15%; transform-origin: center 15%; }
       .ab-name      { font-size: clamp(0.9rem, 5vw, 1.2rem); }
       .ab-sec-body  { font-size: 0.7rem; line-height: 1.4; }
       .ab-tag       { font-size: 0.5rem; padding: 2px 6px; }
@@ -809,6 +810,23 @@ const VW = window.innerWidth, VH = window.innerHeight;
     if (neon) details.neon = neon;
     drawTopDownBuilding(ctx, bx, by, bw, rd, wh, roofC, wallC, sk, details);
   });
+
+  // Mobile-only: extra top-down buildings to fill the gaps
+  if (VW <= 600) {
+    const extraTD = [
+      [tdCenterX - VW*0.44, tdZone.bottom - VH*0.04, VW*0.10, 28, 18, 8, 'rgba(0,200,255,0.40)', '#0e1828', '#09101e'],
+      [tdCenterX + VW*0.34, tdZone.bottom - VH*0.03, VW*0.10, 26, 17, 8, 'rgba(255,40,120,0.40)', '#0e1828', '#09101e'],
+      [tdCenterX - VW*0.38, tdZone.bottom - VH*0.14, VW*0.07, 14, 10, 5, null,                    '#111828', '#0c1320'],
+      [tdCenterX + VW*0.30, tdZone.bottom - VH*0.13, VW*0.07, 13, 10, 4, 'rgba(180,80,255,0.35)', '#111828', '#0c1320'],
+      [tdCenterX - VW*0.46, tdZone.bottom - VH*0.22, VW*0.05, 8,  5,  3, null,                    '#141a2c', '#0f1424'],
+      [tdCenterX + VW*0.42, tdZone.bottom - VH*0.21, VW*0.05, 8,  5,  3, 'rgba(0,200,255,0.25)',  '#141a2c', '#0f1424'],
+    ];
+    extraTD.forEach(([bx, by, bw, rd, wh, sk, neon, roofC, wallC]) => {
+      const details = neon ? [{ox:bw*0.3,oy:0,w:5,h:3}] : [{ox:bw*0.4,oy:1,w:4,h:3}];
+      if (neon) details.neon = neon;
+      drawTopDownBuilding(ctx, bx, by, bw, rd, wh, roofC, wallC, sk, details);
+    });
+  }
 
   // ── 3. FOG / HAZE LAYERS ────────────────────────────────
   // Dense atmospheric fog between the elevated skyline and the top-down buildings below.

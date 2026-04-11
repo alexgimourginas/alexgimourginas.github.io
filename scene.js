@@ -505,39 +505,30 @@ if (isMobileDevice && mobileCanvas) {
   const VW = W(), VH = H();
   const neonCols = ['#00e5ff','#ff2d95','#b44aff','#33ff88','#ffb347'];
 
-  // Build static buildings — two flanking columns + distant skyline
+  // Build static buildings — evenly spread across full width
   const mBuildings = [];
 
   function mBldg(x, y, w, h, col) {
+    // fewer windows — 1 per ~18x20 cell, ~30% chance on
     mBuildings.push({ x, y, w, h, col,
-      windows: Array.from({ length: Math.floor(w/10) * Math.floor(h/14) }, () => ({
+      windows: Array.from({ length: Math.floor(w/18) * Math.floor(h/20) }, () => ({
         cx: x + rand(4, w - 4),
         cy: y + rand(4, h - 4),
         color: neonCols[Math.floor(rand(0, neonCols.length))],
         phase: rand(0, Math.PI * 2),
         speed: rand(0.3, 1.8),
-        on: Math.random() > 0.45,
+        on: Math.random() > 0.7,
       }))
     });
   }
 
-  // Far skyline — thin short buildings across full width
-  for (let i = 0; i < 18; i++) {
-    const bw = rand(14, 32);
-    const bh = rand(VH * 0.12, VH * 0.32);
-    mBldg(rand(0, VW - bw), VH - bh, bw, bh, `rgb(${8+rand(0,8)|0},${10+rand(0,10)|0},${28+rand(0,18)|0})`);
-  }
-  // Left column — tall narrow towers
-  for (let i = 0; i < 5; i++) {
-    const bw = rand(28, 52);
-    const bh = rand(VH * 0.45, VH * 0.80);
-    mBldg(rand(0, VW * 0.22 - bw), VH - bh, bw, bh, `rgb(${10+rand(0,10)|0},${12+rand(0,12)|0},${35+rand(0,20)|0})`);
-  }
-  // Right column
-  for (let i = 0; i < 5; i++) {
-    const bw = rand(28, 52);
-    const bh = rand(VH * 0.45, VH * 0.80);
-    mBldg(VW * 0.78 + rand(0, VW * 0.22 - bw), VH - bh, bw, bh, `rgb(${10+rand(0,10)|0},${12+rand(0,12)|0},${35+rand(0,20)|0})`);
+  // Full-width skyline — varied heights, no zone distinction
+  for (let i = 0; i < 28; i++) {
+    const bw = rand(18, 46);
+    // taller range spread evenly so center doesn't feel empty
+    const bh = rand(VH * 0.20, VH * 0.72);
+    mBldg(rand(i * (VW/28), (i+1) * (VW/28) - bw), VH - bh, bw, bh,
+      `rgb(${8+rand(0,12)|0},${10+rand(0,12)|0},${30+rand(0,22)|0})`);
   }
 
   // Stars
@@ -608,21 +599,48 @@ if (isMobileDevice && mobileCanvas) {
     }
     mc.globalAlpha = 1;
 
-    // Street / ground strip
-    const sg = mc.createLinearGradient(0, VH * 0.9, 0, VH);
-    sg.addColorStop(0, '#0a0f28');
-    sg.addColorStop(1, '#060418');
+    // Ground — fills full bottom so no gap
+    const sg = mc.createLinearGradient(0, VH * 0.82, 0, VH);
+    sg.addColorStop(0, '#090d22');
+    sg.addColorStop(1, '#050314');
     mc.fillStyle = sg;
-    mc.fillRect(0, VH * 0.9, VW, VH * 0.1);
+    mc.fillRect(0, VH * 0.82, VW, VH * 0.18);
 
-    // Neon puddle reflections at bottom
-    for (let i = 0; i < 3; i++) {
-      const px = VW * (0.2 + i * 0.28);
-      const pc = neonCols[i % neonCols.length];
-      const pa = 0.04 + Math.sin(t * 1.2 + i) * 0.02;
+    // Subtle street line
+    mc.strokeStyle = '#00e5ff';
+    mc.globalAlpha = 0.07;
+    mc.lineWidth = 1;
+    mc.beginPath(); mc.moveTo(0, VH * 0.87); mc.lineTo(VW, VH * 0.87); mc.stroke();
+    mc.globalAlpha = 1;
+
+    // Neon puddle reflections — subtle, woven into ground not floating
+    const puddles = [
+      { x: VW*0.18, c: '#00e5ff' }, { x: VW*0.5, c: '#ff2d95' }, { x: VW*0.78, c: '#b44aff' },
+    ];
+    for (let i = 0; i < puddles.length; i++) {
+      const pa = 0.05 + Math.sin(t * 1.1 + i * 1.8) * 0.025;
       mc.globalAlpha = pa;
-      mc.fillStyle = pc;
-      mc.beginPath(); mc.ellipse(px, VH * 0.95, 40, 5, 0, 0, Math.PI * 2); mc.fill();
+      mc.fillStyle = puddles[i].c;
+      mc.beginPath(); mc.ellipse(puddles[i].x, VH * 0.885, 28, 4, 0, 0, Math.PI * 2); mc.fill();
+    }
+    mc.globalAlpha = 1;
+
+    // Neon flow waves — 3 gentle lines across upper sky
+    const flows = [
+      { yBase: VH*0.18, color:'#00e5ff', speed:0.18, amp:28, op:0.10 },
+      { yBase: VH*0.28, color:'#ff2d95', speed:0.13, amp:22, op:0.08 },
+      { yBase: VH*0.38, color:'#b44aff', speed:0.22, amp:18, op:0.07 },
+    ];
+    for (const f of flows) {
+      mc.beginPath();
+      for (let x = 0; x <= VW; x += 4) {
+        const y = f.yBase + Math.sin(x * 0.012 + t * f.speed) * f.amp;
+        x === 0 ? mc.moveTo(x, y) : mc.lineTo(x, y);
+      }
+      mc.strokeStyle = f.color;
+      mc.lineWidth = 1.2;
+      mc.globalAlpha = f.op;
+      mc.stroke();
     }
     mc.globalAlpha = 1;
   }
