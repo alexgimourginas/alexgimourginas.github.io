@@ -10,6 +10,7 @@ const PROJECTS = [
   {
     num:   '01',
     title: 'LoanLens',
+    short: 'AI-powered debt payoff dashboard built in 24hrs at SHU Hackathon.',
     desc:  'A full-stack debt payoff strategizer built in 24 hours at the SHU 2026 Hackathon, where we placed. Users enter their loan info and get a personalized dashboard with payoff timelines, a what-if payment simulator, and an AI advisor that knows their actual numbers and gives real repayment strategy advice.',
     tech:  ['Next.js', 'TypeScript', 'Tailwind CSS', 'Supabase', 'Anthropic API', 'Vercel'],
     color: '#ff3355',
@@ -20,6 +21,7 @@ const PROJECTS = [
   {
     num:   '02',
     title: 'PirateShield',
+    short: 'Multi-layer cybersecurity platform for NJ K-12 schools. Targeting ICICS 2026.',
     desc:  'A multi-layer cybersecurity system built for New Jersey K-12 schools, designed to monitor identity, device, network, and access behavior over time. Includes a 3-layer hybrid risk scoring model combining rule-based detection, autoencoder-based anomaly analysis, and temporal event correlation. Currently targeting publication at ICICS 2026 (Springer LNCS).',
     tech:  ['Python', 'TypeScript', 'Node.js'],
     color: '#ff69b4',
@@ -30,6 +32,7 @@ const PROJECTS = [
   {
     num:   '03',
     title: 'Pokemon Battle Simulator',
+    short: '3-player multiplayer battle sim with a custom-built chatbot, no APIs.',
     desc:  'A 3-player multiplayer Pokemon battle simulator where players connect to a central server, draft teams, and battle in a turn-based GUI system. Features a custom-built chatbot assistant that answers gameplay questions in real time, backed by a local database and hand-crafted query handling, no APIs.',
     tech:  ['Python', 'Tkinter', 'SQLite3', 'TCP Sockets'],
     color: '#33cc77',
@@ -40,6 +43,7 @@ const PROJECTS = [
   {
     num:   '04',
     title: 'Transport Monitor Simulator',
+    short: 'Real-time transit coordination backend using TCP/UDP with design patterns.',
     desc:  'A backend system simulating real-time public transit coordination across buses, trains, and ride shares. Vehicles connect as networked clients to a central control server that handles live rerouting, delay reporting, and fault tolerance using both TCP and UDP. Applies Command, Observer, and Singleton design patterns throughout.',
     tech:  ['Python', 'TCP/UDP Sockets', 'SQLite3', 'Threading'],
     color: '#2299ff',
@@ -77,6 +81,7 @@ PROJECTS.forEach((p) => {
     <div class="pj-card-kanji">${p.kanji}</div>
     <div class="pj-card-num">${p.num} /</div>
     <div class="pj-card-title">${p.title}</div>
+    <div class="pj-card-short">${p.short}</div>
     <div class="pj-card-desc">${p.desc}</div>
     <div class="pj-card-footer">
       <div class="pj-card-tags">${tags}</div>

@@ -1130,6 +1130,9 @@
   font-size: clamp(0.7rem,1.15vw,0.9rem);
   color: #c8d0e8; line-height: 1.4;
 }
+.pj-card-short {
+  display: none;
+}
 .pj-card-footer {
   display: flex; justify-content: space-between; align-items: flex-end;
   gap: 0.5rem; margin-top: 0.2rem;
@@ -1256,10 +1259,16 @@
   .pj-focal-edge-l, .pj-focal-edge-r { display: none; }
   .pj-focal-header { font-size: 0.55rem; padding: 0.4rem 0; }
 
-  /* ── Cards: full width, descriptions back ── */
+  /* ── Cards: full width, short desc visible ── */
   .pj-projects { gap: 0.6rem; }
   .pj-card { padding: 0.7rem 0.8rem; gap: 0.2rem; }
-  .pj-card-desc { display: block; font-size: 0.72rem; line-height: 1.35; }
+  .pj-card-desc { display: none; }
+  .pj-card-short {
+    display: block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem; line-height: 1.35;
+    color: #b0c4e8;
+  }
   .pj-tag { font-size: 0.48rem; }
   .pj-btn { font-size: 0.5rem; }
 

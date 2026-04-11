@@ -344,7 +344,7 @@ function drawTram(t) {
   cx.beginPath(); cx.moveTo(0,y+39); cx.lineTo(W(),y+39); cx.stroke();
   cx.globalAlpha = 0.08;
   cx.beginPath(); cx.moveTo(0,y+41); cx.lineTo(W(),y+41); cx.stroke();
-  cx.globalAlpha = 0.4; cx.strokeStyle = '#ffffff'; cx.lineWidth = 1;
+  cx.globalAlpha = isMobileDevice ? 0.05 : 0.4; cx.strokeStyle = '#ffffff'; cx.lineWidth = 1;
   cx.beginPath(); cx.moveTo(x+60,y-3); cx.lineTo(x+55,y-20); cx.lineTo(x+65,y-20); cx.lineTo(x+60,y-3); cx.stroke();
   cx.globalAlpha = 0.1; cx.strokeStyle = '#00e5ff'; cx.lineWidth = 0.8;
   cx.beginPath(); cx.moveTo(0,y-20); cx.lineTo(W(),y-20); cx.stroke();
