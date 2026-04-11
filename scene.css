@@ -272,7 +272,7 @@
   #hs-building-signs { display: none; }
 
   /* shift entire city scene down */
-  .hs-city-layer { transform: translateY(18vh); }
+  .hs-city-layer { transform: translateY(24vh); }
 
   /* move hero content up */
   .hs-hero { margin-top: -8vh; }
