@@ -525,8 +525,7 @@ if (isMobileDevice && mobileCanvas) {
   // Full-width skyline — varied heights, no zone distinction
   for (let i = 0; i < 28; i++) {
     const bw = rand(18, 46);
-    // moderate heights — buildings sit in lower half of screen
-    const bh = rand(VH * 0.15, VH * 0.48);
+    const bh = rand(VH * 0.15, VH * 0.72);
     mBldg(rand(i * (VW/28), (i+1) * (VW/28) - bw), VH - bh, bw, bh,
       `rgb(${8+rand(0,12)|0},${10+rand(0,12)|0},${30+rand(0,22)|0})`);
   }
@@ -557,6 +556,11 @@ if (isMobileDevice && mobileCanvas) {
       mc.beginPath(); mc.arc(s.x, s.y, s.r, 0, Math.PI * 2); mc.fill();
     }
     mc.globalAlpha = 1;
+
+    // Shift entire city section down
+    const cityShift = VH * 0.14;
+    mc.save();
+    mc.translate(0, cityShift);
 
     // Horizon neon glow
     const hY = VH * 0.72;
@@ -624,6 +628,7 @@ if (isMobileDevice && mobileCanvas) {
       mc.beginPath(); mc.ellipse(puddles[i].x, VH * 0.885, 28, 4, 0, 0, Math.PI * 2); mc.fill();
     }
     mc.globalAlpha = 1;
+    mc.restore(); // end city shift
 
     // Neon flow waves — 3 gentle lines across upper sky
     const flows = [
