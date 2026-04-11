@@ -1223,17 +1223,54 @@
   .pj-tram-system { width: 24%; }
 }
 @media (max-width: 640px) {
-  .pj-focal { width: min(78vw, 440px); }
-  .pj-valley-left, .pj-valley-right { width: 14%; }
-  .pj-card-desc { display: none; }
+  /* ── Scene becomes a fixed decorative header strip ── */
+  .pj-scene {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 28vh; overflow: hidden;
+  }
+
+  /* ── Cards scroll in a normal flow below the scene ── */
+  body { background: #030510; }
+  .pj-focal {
+    position: fixed; bottom: auto; left: 0; right: 0;
+    transform: none;
+    top: 28vh;
+    width: 100%;
+    height: calc(100vh - 28vh);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .pj-focal-top  { display: none; }
+  .pj-focal-base { display: none; }
+  .pj-focal-body {
+    flex: 1; overflow-y: auto;
+    padding: 0.8rem 1rem;
+    gap: 0.6rem;
+    border: none;
+    background: #040618;
+    scrollbar-width: thin;
+    scrollbar-color: #00e5ff33 transparent;
+  }
+  .pj-focal-body::-webkit-scrollbar { width: 3px; }
+  .pj-focal-body::-webkit-scrollbar-thumb { background: #00e5ff55; border-radius: 2px; }
+  .pj-focal-edge-l, .pj-focal-edge-r { display: none; }
+  .pj-focal-header { font-size: 0.55rem; padding: 0.4rem 0; }
+
+  /* ── Cards: full width, descriptions back ── */
+  .pj-projects { gap: 0.6rem; }
+  .pj-card { padding: 0.7rem 0.8rem; gap: 0.2rem; }
+  .pj-card-desc { display: block; font-size: 0.72rem; line-height: 1.35; }
+  .pj-tag { font-size: 0.48rem; }
+  .pj-btn { font-size: 0.5rem; }
+
+  /* ── Hide scene decoration that bleeds awkwardly ── */
+  .pj-valley-left, .pj-valley-right { display: none; }
   .pj-vb-neon-circle, .pj-vb-neon-ring { display: none; }
   .pj-holo-tri, .pj-holo-diamond, .pj-holo-hex, .pj-holo-cross, .pj-holo-bars { display: none; }
   .pj-tram-system { display: none; }
   .pj-aircraft { display: none; }
+  .pj-depth-haze { display: none; }
 }
 @media (max-width: 420px) {
-  .pj-focal { width: 93vw; min-width: 0; }
-  .pj-valley-left, .pj-valley-right { width: 10%; }
-  .pj-card-tags { display: none; }
-  .pj-card { padding: 0.4rem; gap: 0.15rem; }
+  .pj-card { padding: 0.6rem 0.7rem; }
 }
