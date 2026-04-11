@@ -1,6 +1,8 @@
 document.documentElement.style.overflow = 'hidden';
 document.body.style.overflow = 'hidden';
 
+const isMobileDevice = window.innerWidth <= 600;
+
 // ── CONTACT MODAL ──
 const contactModal = document.getElementById('contact-modal');
 const openContactModal  = () => { contactModal.style.display = 'flex'; };
@@ -493,7 +495,6 @@ function drawFog(t) {
 }
 
 // ── MAIN LOOP ──
-const isMobileDevice = W() <= 600;
 const targetFPS = isMobileDevice ? 30 : 60;
 const frameInterval = 1000 / targetFPS;
 let lastFrameTime = 0;
