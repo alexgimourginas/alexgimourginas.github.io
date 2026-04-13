@@ -964,15 +964,33 @@ const VW = window.innerWidth, VH = window.innerHeight;
   const c = document.getElementById('rain');
   const ctx = c.getContext('2d');
   let drops = [], raf;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let throttle = prefersReduced ? 0.2 : 1.0;
+
   function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
   resize();
   function spawn(s) {
     return {x:Math.random()*c.width, y:s?Math.random()*c.height:-20,
             len:9+Math.random()*22, spd:10+Math.random()*8, a:0.05+Math.random()*0.18, w:0.5+Math.random()*0.4};
   }
-  function init() { drops=[]; const n=Math.max(200,~~(c.width*c.height/1400)); for(let i=0;i<n;i++) drops.push(spawn(true)); }
+  function init() { drops=[]; const n=Math.max(40,~~(c.width*c.height/1400*throttle)); for(let i=0;i<n;i++) drops.push(spawn(true)); }
   init();
+
+  // Measure FPS over first 90 frames (~1.5s) then adapt drop count if needed
+  let fpsFrames = 0, fpsStart = performance.now(), adapted = prefersReduced;
+
   function draw() {
+    if (!adapted) {
+      fpsFrames++;
+      if (fpsFrames === 90) {
+        const fps = 90000 / (performance.now() - fpsStart);
+        if      (fps < 30) throttle = 0.25;
+        else if (fps < 45) throttle = 0.5;
+        adapted = true;
+        if (throttle < 1.0) init();
+      }
+    }
     ctx.clearRect(0, 0, c.width, c.height);
     ctx.strokeStyle = 'rgba(145,185,200,1)';
     for (const d of drops) {
