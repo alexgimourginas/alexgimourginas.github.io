@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VNDY91B4HR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VNDY91B4HR');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alex Gimourginas</title>
@@ -480,7 +488,7 @@
   <!-- Rooftop floor strip -->
   <div id="rooftop"></div>
 
-  <a href="index.html" class="ab-back">← BACK TO DISTRICT</a>
+  <a href="index.html" class="ab-back" onclick="gtag('event','nav_click',{button_name:'back_to_district'})">← BACK TO DISTRICT</a>
 
   <!-- Laptop on desk, sitting on rooftop -->
   <div id="laptop-unit">

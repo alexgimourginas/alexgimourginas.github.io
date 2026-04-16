@@ -6,7 +6,10 @@
       "Bash(npx vite:*)",
       "Bash(ls -la projects.*)",
       "Bash(gh run:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git add:*)"
     ]
   }
 }

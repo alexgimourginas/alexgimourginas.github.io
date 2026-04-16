@@ -72,6 +72,7 @@ PROJECTS.forEach((p) => {
   if (primaryUrl) {
     el.addEventListener('click', e => {
       if (e.target.closest('.pj-btn')) return;
+      gtag('event', 'nav_click', { button_name: 'project_card_' + p.title.toLowerCase().replace(/\s+/g, '_') });
       window.open(primaryUrl, '_blank', 'noopener,noreferrer');
     });
   }
@@ -91,6 +92,15 @@ PROJECTS.forEach((p) => {
       </div>
     </div>
   `;
+
+  const slug = p.title.toLowerCase().replace(/\s+/g, '_');
+  el.querySelectorAll('.pj-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isLive = btn.textContent.trim().startsWith('LIVE');
+      gtag('event', 'nav_click', { button_name: (isLive ? 'project_live_' : 'project_code_') + slug });
+    });
+  });
+
   projectsEl.appendChild(el);
 });
 

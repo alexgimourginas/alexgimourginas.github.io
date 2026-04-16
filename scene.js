@@ -5,7 +5,7 @@ const isMobileDevice = window.innerWidth <= 600;
 
 // ── CONTACT MODAL ──
 const contactModal = document.getElementById('contact-modal');
-const openContactModal  = () => { contactModal.style.display = 'flex'; };
+const openContactModal  = () => { contactModal.style.display = 'flex'; gtag('event', 'nav_click', { button_name: 'contact' }); };
 const closeContactModal = () => { contactModal.style.display = 'none'; };
 
 document.getElementById('contact-btn').addEventListener('click', openContactModal);
