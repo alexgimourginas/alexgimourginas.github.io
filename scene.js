@@ -271,7 +271,7 @@ function drawNeonFlow(t) {
       flowCtx.quadraticCurveTo(animated[i].x, animated[i].y, cx, cy);
     }
     flowCtx.strokeStyle = s.color;
-    flowCtx.lineWidth = s.width * 4; flowCtx.globalAlpha = s.opacity * 0.3; flowCtx.stroke();
+    if (perfTier === 'high') { flowCtx.lineWidth = s.width * 4; flowCtx.globalAlpha = s.opacity * 0.3; flowCtx.stroke(); }
     flowCtx.lineWidth = s.width;     flowCtx.globalAlpha = s.opacity;       flowCtx.stroke();
     flowCtx.lineWidth = s.width*0.3; flowCtx.globalAlpha = s.opacity * 2;   flowCtx.stroke();
   }
@@ -352,7 +352,7 @@ function drawTram(t) {
   cx.beginPath(); cx.moveTo(0,y-20); cx.lineTo(W(),y-20); cx.stroke();
   cx.globalAlpha = 0.5 + Math.sin(t*3)*0.2; cx.fillStyle = '#00e5ff';
   cx.fillRect(x+2, y+32, 116, 2);
-  if (!isMobileDevice) { cx.shadowColor = '#00e5ff'; cx.shadowBlur = 8; }
+  if (!isMobileDevice && perfTier === 'high') { cx.shadowColor = '#00e5ff'; cx.shadowBlur = 8; }
   cx.fillRect(x+2, y+32, 116, 2); cx.shadowBlur = 0;
   cx.restore();
   tram.x += tram.speed;
@@ -376,7 +376,7 @@ function drawFlyingCars(t) {
     cx.globalAlpha = 0.7; cx.fillStyle = '#0c1240';
     cx.beginPath(); cx.ellipse(car.x, cy, car.size, car.size*0.4, 0, 0, Math.PI*2); cx.fill();
     cx.globalAlpha = 0.4; cx.fillStyle = car.color;
-    if (!isMobileDevice) { cx.shadowColor = car.color; cx.shadowBlur = 12; }
+    if (!isMobileDevice && perfTier === 'high') { cx.shadowColor = car.color; cx.shadowBlur = 12; }
     cx.beginPath(); cx.ellipse(car.x, cy+car.size*0.3, car.size*0.7, 2, 0, 0, Math.PI*2); cx.fill();
     cx.shadowBlur = 0;
     const dir = car.speed > 0 ? 1 : -1;
@@ -666,6 +666,30 @@ if (isMobileDevice && mobileCanvas) {
   requestAnimationFrame(mobileLoop);
 }
 
+// ── PERFORMANCE TIER ──────────────────────────────────────────────────────────
+// Measured over first 60 rendered frames (~1s). Tiers only activate on devices
+// that are actually struggling — fast GPUs stay at 'high' and see no change.
+let perfTier = 'high';          // 'high' | 'medium' | 'low'
+let fpsMeasureFrames = 0;
+let fpsMeasureStart  = 0;
+let fpsMeasured      = isMobileDevice; // mobile has its own loop, skip
+let lastSlowTime     = 0;
+const SLOW_INTERVAL  = 1000 / 30;     // 30fps cap for throttled effects
+
+function applyPerfTier(fps) {
+  if      (fps < 30) perfTier = 'low';
+  else if (fps < 45) perfTier = 'medium';
+  if (perfTier === 'high') return;
+  // Pause glow orb drift (barely visible at <5% opacity — zero perceptual loss)
+  document.querySelectorAll('.hs-glow-orb').forEach(el => {
+    el.style.animationPlayState = 'paused';
+  });
+  if (perfTier === 'low') {
+    // Halve rain drop count
+    rainDrops.splice(Math.ceil(rainDrops.length / 2));
+  }
+}
+
 // ── MAIN LOOP (desktop only) ──────────────────────────────────────────────────
 const targetFPS = isMobileDevice ? 30 : 60;
 const frameInterval = 1000 / targetFPS;
@@ -677,15 +701,32 @@ function loop(ts) {
   lastFrameTime = ts;
   const t = ts * 0.001;
   if (isMobileDevice) return; // mobile uses its own canvas
+
+  // ── FPS measurement (first 60 rendered frames) ──
+  if (!fpsMeasured) {
+    if (fpsMeasureFrames === 0) fpsMeasureStart = ts;
+    fpsMeasureFrames++;
+    if (fpsMeasureFrames === 60) {
+      applyPerfTier(60000 / (ts - fpsMeasureStart));
+      fpsMeasured = true;
+    }
+  }
+
+  // isSlow gates effects to 30fps on medium/low tiers
+  const isSlow = ts - lastSlowTime >= SLOW_INTERVAL;
+  if (isSlow) lastSlowTime = ts;
+
   drawRain();
-  drawWindows(t);
+  if (perfTier === 'high' || isSlow) drawWindows(t);
   drawNeonFlow(t);
-  drawReflections(t);
+  // reflections: 30fps on medium, skipped on low
+  if (perfTier === 'high' || (perfTier === 'medium' && isSlow)) drawReflections(t);
   if (objCtx && objectsCanvas) objCtx.clearRect(0, 0, objectsCanvas.width, objectsCanvas.height);
   drawTram(t);
   drawFlyingCars(t);
   drawPuddles(t);
-  drawFog(t);
+  // fog: 30fps on medium/low
+  if (perfTier === 'high' || isSlow) drawFog(t);
 }
 requestAnimationFrame(loop);
 

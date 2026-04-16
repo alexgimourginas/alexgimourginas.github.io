@@ -418,19 +418,19 @@
 
     /* ── MOBILE ─────────────────────────────────────────── */
     @media (max-width: 600px) {
-      #laptop-unit  { width: 96vw; bottom: 4vh; }
+      #laptop-unit  { width: 96vw; bottom: 2vh; }
       #desk-surface { width: 100vw; }
       #desk-pedestal{ width: 90vw; }
-      #screen-lid   { border-radius: 4px 4px 0 0; }
-      .ab-body      { overflow-y: auto; scrollbar-width: none; padding: 8px 10px; gap: 7px; }
+      #screen-lid   { border-radius: 4px 4px 0 0; padding-bottom: 92%; }
+      .ab-body      { overflow-y: auto; scrollbar-width: none; padding: 8px 10px; gap: 8px; }
       .ab-body::-webkit-scrollbar { display: none; }
-      .ab-col-side  { width: 70px; }
-      .ab-photo     { width: 70px; height: 84px; }
-      .ab-photo img { object-position: center 50%; transform-origin: center 50%; }
-      .ab-name      { font-size: clamp(0.97rem, 5.3vw, 1.3rem); }
-      .ab-sec-label { font-size: clamp(0.42rem, 0.68vw, 0.58rem); }
-      .ab-sec-body  { font-size: 0.76rem; line-height: 1.4; }
-      .ab-tag       { font-size: 0.54rem; padding: 2px 6px; }
+      /* hide side column — photo at 70px is too small to be useful, gives main content full width */
+      .ab-col-side  { display: none; }
+      .ab-name      { font-size: clamp(1.1rem, 5.8vw, 1.5rem); }
+      .ab-role      { font-size: clamp(0.75rem, 1.9vw, 0.9rem); }
+      .ab-sec-label { font-size: 0.60rem; }
+      .ab-sec-body  { font-size: 0.88rem; line-height: 1.45; }
+      .ab-tag       { font-size: 0.70rem; padding: 3px 7px; }
       #scr-about::after {
         content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 24px;
         background: linear-gradient(to bottom, transparent, rgba(248,245,236,0.95));
@@ -961,8 +961,9 @@ const VW = window.innerWidth, VH = window.innerHeight;
     ctx.stroke();
   }
 
-  drawFlankEdge(0, VW * 0.15, true);
-  drawFlankEdge(VW * 0.85, VW * 0.15, false);
+  const flankW = VW <= 600 ? VW * 0.06 : VW * 0.15;
+  drawFlankEdge(0, flankW, true);
+  drawFlankEdge(VW - flankW, flankW, false);
 
 })();
 
