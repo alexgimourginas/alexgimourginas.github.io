@@ -1051,6 +1051,26 @@
 
 /* ── PROJECT CARDS ── */
 .pj-projects { display: flex; flex-direction: column; gap: 0.7rem; }
+
+/* Desktop: the building is pinned to the bottom of the screen, so cap the card
+   list's height (keeps the spire + header on screen) and scroll inside it. */
+@media (min-width: 641px) {
+  .pj-projects {
+    max-height: calc(91vh - 45px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px 6px 4px;
+    margin: -8px -6px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff2a transparent;
+  }
+  .pj-projects::-webkit-scrollbar { width: 5px; }
+  .pj-projects::-webkit-scrollbar-thumb { background: #ffffff2a; border-radius: 3px; }
+  .pj-projects.pj-has-more {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+            mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+  }
+}
 .pj-card {
   position: relative;
   background: linear-gradient(170deg, var(--cc-in) 0%, rgba(1,2,12,0.65) 40%, rgba(1,2,12,0.55) 100%);

@@ -9,6 +9,17 @@ document.body.style.overflow = 'hidden';
 const PROJECTS = [
   {
     num:   '01',
+    title: 'Dungeon Shop',
+    short: 'Solo-built Roblox dungeon-extraction and shop game. 107k lines of strict Luau.',
+    desc:  "A Roblox game I'm building solo that mixes dungeon extraction with shop management. Players dive into a dungeon that's procedurally generated every visit, fight for loot, then sell it to NPC customers in a shop they build. The server-authoritative, fully data-driven codebase is about 107k lines of strict Luau: a seeded backtracking room generator, 16 enemies across 6 AI behaviors, 35 boss attack modules, and ProfileStore saves with versioned migrations. In development and playable through 59 depths and two bosses.",
+    tech:  ['Luau', 'Roblox Studio', 'Rojo', 'ProfileStore', 'Blender'],
+    color: '#ffaa22',
+    kanji: '宝',
+    live:  '#',
+    code:  '#',
+  },
+  {
+    num:   '02',
     title: 'LoanLens',
     short: 'AI-powered debt payoff dashboard built in 24hrs at SHU Hackathon.',
     desc:  'A full-stack debt payoff strategizer built in 24 hours at the SHU 2026 Hackathon, where we placed. Users enter their loan info and get a personalized dashboard with payoff timelines, a what-if payment simulator, and an AI advisor that knows their actual numbers and gives real repayment strategy advice.',
@@ -19,7 +30,7 @@ const PROJECTS = [
     code:  'https://github.com/alexgimourginas/LoanLens',
   },
   {
-    num:   '02',
+    num:   '03',
     title: 'PirateShield',
     short: 'Endpoint risk model for NJ K-12 security. First-author paper at ACM RACS 2026.',
     desc:  'A cybersecurity platform for New Jersey K-12 schools that monitors identity, device, network, and access behavior. I designed and built its endpoint risk model: weighted rule-based scoring, an autoencoder trained only on normal system-call activity, and Hawkes-inspired temporal chain scoring, fused into a 0-100 risk score with five severity tiers in under 3 ms per event. Evaluated on ADFA-LD (mean AUC 0.76) with a layer ablation on multi-step attacks. Accepted as a first-author paper at ACM RACS 2026 in Fukuoka, Japan.',
@@ -30,7 +41,7 @@ const PROJECTS = [
     code:  'https://github.com/poncema4/PirateShield/tree/main/pirateshield/scripts/device_model',
   },
   {
-    num:   '03',
+    num:   '04',
     title: 'Pokemon Battle Simulator',
     short: '3-player multiplayer battle sim with a custom-built chatbot, no APIs.',
     desc:  'A 3-player multiplayer Pokemon battle simulator where players connect to a central server, draft teams, and battle in a turn-based GUI system. Features a custom-built chatbot assistant that answers gameplay questions in real time, backed by a local database and hand-crafted query handling, no APIs.',
@@ -40,17 +51,7 @@ const PROJECTS = [
     live:  '#',
     code:  'https://github.com/alexgimourginas/Pokemon-Battle-Simulator',
   },
-  {
-    num:   '04',
-    title: 'Transport Monitor Simulator',
-    short: 'Real-time transit coordination backend using TCP/UDP with design patterns.',
-    desc:  'A backend system simulating real-time public transit coordination across buses, trains, and ride shares. Vehicles connect as networked clients to a central control server that handles live rerouting, delay reporting, and fault tolerance using both TCP and UDP. Applies Command, Observer, and Singleton design patterns throughout.',
-    tech:  ['Python', 'TCP/UDP Sockets', 'SQLite3', 'Threading'],
-    color: '#2299ff',
-    kanji: '運',
-    live:  '#',
-    code:  'https://github.com/alexgimourginas/Transport-Monitor-Simulator',
-  },
+
 ];
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
@@ -103,6 +104,15 @@ PROJECTS.forEach((p) => {
 
   projectsEl.appendChild(el);
 });
+
+// Fade the bottom edge while there are more cards below (desktop scroll area)
+const updateMoreHint = () => {
+  const more = projectsEl.scrollHeight - projectsEl.scrollTop - projectsEl.clientHeight > 4;
+  projectsEl.classList.toggle('pj-has-more', more);
+};
+projectsEl.addEventListener('scroll', updateMoreHint, { passive: true });
+window.addEventListener('resize', updateMoreHint);
+updateMoreHint();
 
 // ── DENSE BACKGROUND CITY — 3 depth layers ──────────────────────────────────
 const bgCity = document.getElementById('pj-bg-city');
