@@ -21,13 +21,13 @@ const PROJECTS = [
   {
     num:   '02',
     title: 'PirateShield',
-    short: 'Multi-layer cybersecurity platform for NJ K-12 schools. Targeting ICICS 2026.',
-    desc:  'A multi-layer cybersecurity system built for New Jersey K-12 schools, designed to monitor identity, device, network, and access behavior over time. Includes a 3-layer hybrid risk scoring model combining rule-based detection, autoencoder-based anomaly analysis, and temporal event correlation. Currently targeting publication at ICICS 2026 (Springer LNCS).',
-    tech:  ['Python', 'TypeScript', 'Node.js'],
+    short: 'Endpoint risk model for NJ K-12 security. First-author paper at ACM RACS 2026.',
+    desc:  'A cybersecurity platform for New Jersey K-12 schools that monitors identity, device, network, and access behavior. I designed and built its endpoint risk model: weighted rule-based scoring, an autoencoder trained only on normal system-call activity, and Hawkes-inspired temporal chain scoring, fused into a 0-100 risk score with five severity tiers in under 3 ms per event. Evaluated on ADFA-LD (mean AUC 0.76) with a layer ablation on multi-step attacks. Accepted as a first-author paper at ACM RACS 2026 in Fukuoka, Japan.',
+    tech:  ['Python', 'TensorFlow / Keras', 'scikit-learn', 'NumPy', 'TypeScript'],
     color: '#ff69b4',
     kanji: '守',
     live:  '#',
-    code:  'https://github.com/poncema4/PirateShield',
+    code:  'https://github.com/poncema4/PirateShield/tree/main/pirateshield/scripts/device_model',
   },
   {
     num:   '03',
