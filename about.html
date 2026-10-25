@@ -311,7 +311,7 @@
     }
     .ab-sec-body {
       font-family:'Rajdhani',sans-serif; font-weight:600;
-      font-size: clamp(0.58rem,1vw,0.88rem);
+      font-size: clamp(0.72rem,1vw,0.88rem);
       line-height:1.45; color:#1a1430;
     }
 
@@ -439,7 +439,8 @@
     }
 
     /* ── SHORT SCREENS (e.g. 1280×800) ─────────────────── */
-    @media (max-height: 820px) {
+    /* min-width keeps this desktop-only; phones are short too and were getting ~8px text */
+    @media (max-height: 820px) and (min-width: 601px) {
       #laptop-unit  { width: clamp(300px, 44vw, 700px); }
       #desk-surface { width: clamp(360px, 57vw, 860px); }
       #desk-pedestal{ width: clamp(260px, 44vw, 680px); }
@@ -450,10 +451,43 @@
       #scr-about::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 28px; background: linear-gradient(to bottom, transparent, rgba(248,245,236,0.92)); pointer-events: none; z-index: 5; }
       .ab-name      { font-size: clamp(0.85rem, 1.7vw, 1.2rem); }
       .ab-role      { font-size: clamp(0.52rem, 0.82vw, 0.72rem); }
-      .ab-sec-body  { font-size: clamp(0.52rem, 0.88vw, 0.78rem); line-height: 1.35; }
+      .ab-sec-body  { font-size: clamp(0.68rem, 0.88vw, 0.78rem); line-height: 1.35; }
       .ab-tag       { font-size: clamp(0.44rem, 0.62vw, 0.58rem); padding: 2px 6px; }
       .ab-col-main  { gap: clamp(3px,0.5vw,7px); }
       .ab-sec-label { margin-bottom: 1px; }
+    }
+
+    /* ── SCREEN FITS ITS CONTENT ───────────────────────── */
+    /* The profile sits in normal flow so it sets the screen's height. The screen
+       stays 16:10 (phones: ~1:1) when the content fits and grows taller when it
+       doesn't, so nothing is clipped and there's never an inner scrollbar. */
+    #laptop-unit { --lw: clamp(320px, 48vw, 780px); --ar: 0.625; width: var(--lw); }
+    @media (max-height: 820px) and (min-width: 601px) {
+      #laptop-unit { --lw: clamp(300px, 44vw, 700px); }
+    }
+    @media (max-width: 600px) {
+      #laptop-unit { --lw: 96vw; --ar: 0.92; }
+    }
+    #screen-lid { padding-bottom: 0; }
+    #screen     { position: relative; inset: auto; }
+    #scr-about  { position: relative; inset: auto; min-height: calc(var(--lw) * var(--ar)); }
+    .ab-body    { overflow: visible !important; }
+    #scr-about::after { content: none !important; }
+
+    /* The laptop gets its own full-window layer and sits at the bottom like before.
+       Last resort: if it's ever taller than the window, this layer scrolls (no
+       visible scrollbar) instead of pushing the top of the screen off-screen. */
+    #laptop-unit {
+      position: fixed; inset: 0; transform: none; width: auto;
+      overflow-x: hidden; overflow-y: auto; scrollbar-width: none;
+      padding: 52px 0 7vh;
+    }
+    #laptop-unit::-webkit-scrollbar { display: none; }
+    #screen-lid { width: var(--lw); margin-top: auto; flex-shrink: 0; }
+    #keyboard   { width: var(--lw); flex-shrink: 0; }
+    #desk-surface, #desk-pedestal { flex-shrink: 0; }
+    @media (max-width: 600px) {
+      #laptop-unit { padding-top: 44px; padding-bottom: 2vh; }
     }
   </style>
 </head>
@@ -553,7 +587,7 @@
                 </div>
                 <div>
                   <div class="ab-sec-label">CURRENTLY</div>
-                  <div class="ab-sec-body">My first-author paper, <i>A Three-Layer Composite Risk Model for Endpoint Security Monitoring in K-12 Schools</i>, got accepted to ACM RACS 2026, so I'm heading to Fukuoka, Japan in November to present it. I'm staying in Japan for a couple extra weeks after the conference to travel around the country, and I'm really looking forward to the trip. The paper comes out of PirateShield, a cybersecurity initiative at Seton Hall where we're building a deployable platform to strengthen digital safety across New Jersey K-12 schools. Right now I'm building the simulated school environment we use to test how well the platform catches insider misuse, ahead of a leadership demo in December.<br><br>Outside of that, I've been playing a lot of Overwatch lately. Cyberpunk: Edgerunners Season 2 also just came out, and I'm planning to watch it soon. The Cyberpunk universe is the inspiration behind this site, so I'm excited to see where they take the story.</div>
+                  <div class="ab-sec-body">My research paper on PirateShield, a cybersecurity platform we're building for New Jersey K-12 schools, got accepted to ACM RACS 2026! I'm presenting it in Fukuoka, Japan in November, then staying a couple extra weeks to travel around. Really looking forward to that trip.<br><br>Other than that I've been playing a lot of Overwatch, and Edgerunners Season 2 just came out so I'm watching that soon. Cyberpunk is the whole inspiration behind this site, so I'm pretty hyped for it.</div>
                 </div>
               </div>
               <div class="ab-col-side">
